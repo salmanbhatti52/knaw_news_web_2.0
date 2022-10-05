@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:knaw_news/mixin/data.dart';
 import 'package:knaw_news/model/mute_model.dart';
 import 'package:knaw_news/services/dio_service.dart';
 import 'package:knaw_news/util/dimensions.dart';
 import 'package:knaw_news/util/images.dart';
-import 'package:knaw_news/util/styles.dart';
 import 'package:knaw_news/view/base/custom_snackbar.dart';
 import 'package:knaw_news/view/base/loading_dialog.dart';
 import 'package:knaw_news/view/base/no_data_screen.dart';
@@ -20,115 +18,91 @@ class MutedMember extends StatefulWidget {
 }
 
 class _MutedMemberState extends State<MutedMember> {
-  List<MutedMemberDetail>? mutedMemberDetail;
+  ScrollController scrollController=ScrollController();
+  List<MutedMemberDetail>? mutedMemberDetail=[];
   int offset=0;
   int totalMember=0;
   int? selectedIndex;
+  bool isLoading=true;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    scrollController.addListener(_handleScroll);
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       mutedMembersList();
     });
   }
+  void _handleScroll() {
+    if(scrollController.position.pixels >= scrollController.position.maxScrollExtent){
+      print("max scroll");
+      if(totalMember>mutedMemberDetail!.length&&!isLoading) {
+        offset+=10;
+        mutedMembersList();
+        isLoading=true;
+      }
+      else{
+        print("Follower not avilable");
+      }
+
+    }
+    else{
+    }
+  }
   @override
   Widget build(BuildContext context) {
-    return GetPlatform.isDesktop?totalMember>0?Container(
-      width: MediaQuery.of(context).size.width*0.2,
-      child: ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: mutedMemberDetail!.length,
-          itemBuilder: (context,index){
-            return Column(
-              children: [
-                MuteMemberCard(mutedMemberDetail: mutedMemberDetail![index],onTapSuffix: (){
-                  selectedIndex=index;
-                  unMuteMember();
-                },),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5.0),
-                  child: Container(
-                    color: Theme.of(context).disabledColor.withOpacity(0.5),
-                    width: MediaQuery.of(context).size.width*0.85,
-                    height: 1,
-                  ),
-                ),
-              ],
-
-            );
-
-          }
-      ),
-    ):
-    Center(child: NoDataScreen(text: "No Muted Member Exist",)):
-    Scaffold(
+    Size size=MediaQuery.of(context).size;
+    double mediaWidth =size.width<1000?size.width:size.width*0.5;
+    return Scaffold(
       appBar: AppBarWithBack(title: AppData().language!.mutedMembers,isTitle: true,isSuffix: false,),
       //backgroundColor:Get.isDarkMode ? Colors.black : Colors.white,
-      body: SafeArea(child: Scrollbar(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
-          child: Center(
-            child: totalMember>0?Container(
-              width: MediaQuery.of(context).size.width*0.9,
-              child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  //padding: EdgeInsetsGeometry.infinity,
-                  itemCount: mutedMemberDetail!.length,
-                  itemBuilder: (context,index){
-                    return Column(
-                      children: [
-                        MuteMemberCard(mutedMemberDetail: mutedMemberDetail![index],onTapSuffix: (){
-                          selectedIndex=index;
-                          unMuteMember();
-                        },),
-                        index+1==mutedMemberDetail!.length&&totalMember>mutedMemberDetail!.length?InkWell(
-                          onTap: (){
-                            offset+=10;
-                            mutedMembersList();
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                            margin: EdgeInsets.symmetric(vertical: 10),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.blueGrey.withOpacity(0.2)
-                            ),
-                            child: Text("${AppData().language!.loadMore} ▶",style: openSansSemiBold.copyWith(fontSize: Dimensions.fontSizeSmall),),
-                          ),
-                        ):Container(
-                          color: Theme.of(context).disabledColor.withOpacity(0.5),
-                          width: MediaQuery.of(context).size.width*0.9,
-                          margin: index+1==mutedMemberDetail!.length?EdgeInsets.only(top: 10):EdgeInsets.symmetric(vertical: 10),
-                          height: 1,
-                        ),
-                      ],
+      body: SafeArea(
+        child: totalMember>0?Align(
+          alignment: Alignment.topCenter,
+          child: Container(
+          width: mediaWidth,
+          child: ListView.builder(
+            controller: scrollController,
+              physics: BouncingScrollPhysics(),
+              shrinkWrap: true,
+              //padding: EdgeInsetsGeometry.infinity,
+              itemCount: mutedMemberDetail!.length,
+              itemBuilder: (context,index){
+                return Column(
+                  children: [
+                    MuteMemberCard(mutedMemberDetail: mutedMemberDetail![index],onTapSuffix: (){
+                      selectedIndex=index;
+                      unMuteMember();
+                    },),
+                    Container(
+                      color: Theme.of(context).disabledColor.withOpacity(0.5),
+                      width: MediaQuery.of(context).size.width*0.9,
+                      margin: EdgeInsets.symmetric(vertical: 7),
+                      height: 1.5,
+                    ),
+                  ],
 
-                    );
+                );
 
-                  }
-              ),
-            ):Center(child: NoDataScreen(text: "No Muted Member Exist",)),
+              }
           ),
-        ),
-      ),),
+      ),
+        ):Center(child: NoDataScreen(text: "No Muted Member Exist",)),),
     );
   }
   void mutedMembersList() async{
     openLoadingDialog(context, "Loading");
     var response;
     response = await DioService.post('get_muted_members', {
-      "offset" : offset,
+      "offset": offset,
       "userId": AppData().userdetail!.usersId
     });
     if(response['status']=='success'){
       totalMember=response['total_count'];
       var jsonData= response['data'] as List;
       mutedMemberDetail!.addAll(jsonData.map<MutedMemberDetail>((e) => MutedMemberDetail.fromJson(e)).toList());
+      isLoading=false;
       setState(() {
 
       });
@@ -136,12 +110,11 @@ class _MutedMemberState extends State<MutedMember> {
       Navigator.pop(context);
     }
     else{
-      totalMember=0;
       setState(() {
 
       });
       Navigator.pop(context);
-      showCustomSnackBar(response['message']);
+      //showCustomSnackBar(response['message']);
     }
 
   }
@@ -161,14 +134,14 @@ class _MutedMemberState extends State<MutedMember> {
 
       });
       Navigator.pop(context);
-      showCustomSnackBar(response['data'],isError: false);
+      //showCustomSnackBar(response['data'],isError: false);
     }
     else{
       setState(() {
 
       });
       Navigator.pop(context);
-      showCustomSnackBar(response['message']);
+      //showCustomSnackBar(response['message']);
     }
 
   }

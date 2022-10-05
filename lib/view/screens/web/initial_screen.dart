@@ -11,6 +11,7 @@ import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_notifier.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:knaw_news/mixin/data.dart';
+import 'package:knaw_news/model/emojis_model.dart';
 import 'package:knaw_news/model/language_model.dart';
 import 'package:knaw_news/model/post_model.dart';
 import 'package:knaw_news/model/signup_model.dart';
@@ -29,9 +30,11 @@ import 'package:knaw_news/view/screens/auth/sign_in_screen.dart';
 import 'package:knaw_news/view/screens/auth/social_login.dart';
 import 'package:knaw_news/view/screens/auth/web/web_sign_in.dart';
 import 'package:knaw_news/view/screens/dashboard/widget/bottom_nav_item.dart';
+import 'package:knaw_news/view/screens/home/full_transition_app.dart';
+import 'package:knaw_news/view/screens/home/tabbar_item.dart';
 import 'package:knaw_news/view/screens/home/widget/full_transition.dart';
 import 'package:knaw_news/view/screens/home/widget/report_dialog.dart';
-import 'package:knaw_news/view/screens/home/widget/small_transition.dart';
+import 'package:knaw_news/view/screens/home/small_transition.dart';
 import 'package:knaw_news/view/screens/home/widget/vertical_tile.dart';
 import 'package:knaw_news/view/screens/menu/app_bar.dart';
 import 'package:knaw_news/view/screens/menu/drawer.dart';
@@ -58,8 +61,7 @@ class _InitialScreenState extends State<InitialScreen> with TickerProviderStateM
   List <Placemark>? plackmark;
   String address="";
   String country="";
-  Position position=Position(longitude: 0, latitude: 0, timestamp: DateTime.now(),
-      accuracy: 1, altitude: 1, heading: 1, speed: 1, speedAccuracy: 1);
+  Position position=Position(longitude: 0, latitude: 0, timestamp: DateTime.now(), accuracy: 1, altitude: 1, heading: 1, speed: 1, speedAccuracy: 1);
   int selected=1;
   String categoryTag="";
   String category="Most Popular";
@@ -71,59 +73,24 @@ class _InitialScreenState extends State<InitialScreen> with TickerProviderStateM
   int totalPost=-1;
   int beforeLoginId=1;
   bool isLanguage=AppData().isLanguage;
+  List<GetEmojis>? emojies;
+  List<Widget> tabs = [];
+  List<Widget> tabsItems = [];
+  bool dataLoaded = false;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     isLanguage=AppData().isLanguage;
     getLanguage();
-    _tabController = TabController(length: 14, initialIndex: 0, vsync: this,);
-    _tabController!.addListener(_handleTabSelection);
-    scrollController.addListener(_handleScroll);
+    _tabController = TabController(length: 16, initialIndex: 0, vsync: this,);
     //loadOtherPosts(isTap: false);
     getLocation();
     recentPost();
+    getEmojis();
+
   }
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    scrollController.dispose();
-  }
-  void _handleTabSelection() {
-    selected=_tabController!.index+1;
-    setState(() {});
-    category=categoryList[selected-1];
-    selected>3?loadPosts(isTap: false):loadOtherPosts(isTap: false);
-  }
-
-  void _handleScroll() {
-    print(scrollController.offset);
-    print(scrollController.position.extentBefore);
-    print(scrollController.position.extentAfter);
-    print(scrollController.position.extentInside);
-    print(scrollController.position.viewportDimension);
-    print(scrollController.position.pixels);
-
-
-
-    if(scrollController.position.pixels >= scrollController.position.maxScrollExtent){
-      print("max scroll");
-      if(totalPost>int.parse(offset)+6) {
-        offset = (int.parse(offset) +6).toString();
-        print("load more");
-        selected>3?loadPostsMore():loadOtherPostsMore();
-      }
-      else{
-        print("post not avilable");
-      }
-
-    }
-    else{
-      print("no max scroll");
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     Size size=MediaQuery.of(context).size;
@@ -132,7 +99,8 @@ class _InitialScreenState extends State<InitialScreen> with TickerProviderStateM
     return Scaffold(
       drawer: new MyDrawer(),
       appBar: WebMenuBar(context: context,isAuthenticated: false,),
-      body: SafeArea(child: Center(
+      body: dataLoaded == false
+          ? Center(child: CircularProgressIndicator(color: Colors.amber,),) : SafeArea(child: Center(
         child: Container(
           child: Column(
             children: [
@@ -152,71 +120,21 @@ class _InitialScreenState extends State<InitialScreen> with TickerProviderStateM
                     ),
                     Expanded(
                       child: DefaultTabController(
-                          length: 14,
+                          length: emojies!.length,
                           child: SizedBox(
-                            height: 40,
+                            height: 60,
                             //width: 200,
                             child: TabBar(
-                              controller: _tabController,
-                              padding: EdgeInsets.zero,
-                              labelPadding: EdgeInsets.symmetric(horizontal: 5),
-                              indicatorPadding: EdgeInsets.zero,
-                              isScrollable: true,
-                              // indicator: BoxDecoration(
-                              //   color: Theme.of(context).primaryColor,
-                              //   borderRadius: BorderRadiusDirectional.circular(20),
-                              // ),
-                              indicatorWeight: 0.0001,
-                              indicatorColor: Colors.white,
-                              indicatorSize: TabBarIndicatorSize.label,
-                              labelColor:Colors.black,
-                              unselectedLabelColor:Colors.black,
-                              unselectedLabelStyle: openSansBold.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeSmall),
-                              labelStyle: openSansBold.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor),
-                              tabs: [
-                                CategoryItem(title: isLanguage?AppData().language!.trending:"Trending", icon: Images.star,isSelected: selected==1?true:false,onTap: (){selected=1;category="Most Popular";setState(() {});loadOtherPosts();},),
-                                CategoryItem(title: isLanguage?AppData().language!.happy:'Happy', icon: Images.happy,isSelected: selected==2?true:false,onTap: (){selected=2;category="Happy";setState(() {});loadOtherPosts();},),
-                                CategoryItem(title: isLanguage?AppData().language!.gloomy:'Gloomy', icon: Images.sad,isSelected: selected==3?true:false,onTap: (){selected=3;category="Sad";setState(() {});loadOtherPosts();},),
-                                CategoryItem(title: isLanguage?AppData().language!.yourNewsFeed:'Your News Feed', icon: Images.local_news,isSelected: selected==4?true:false,onTap: (){selected=4;category="Your News Feed";setState(() {});loadPosts();},),
-                                CategoryItem(title: isLanguage?AppData().language!.globalNews:'Global News', icon: Images.global_news,isSelected: selected==5?true:false,onTap: (){selected=5;category="Global News";setState(() {});loadPosts();},),
-                                CategoryItem(title: isLanguage?AppData().language!.events:'Events', icon: Images.event,isSelected: selected==6?true:false,onTap: (){selected=6;category="Events";setState(() {});loadPosts();},),
-                                CategoryItem(title: isLanguage?AppData().language!.business:'Business', icon: Images.bussiness,isSelected: selected==7?true:false,onTap: (){selected=7;category="Business";setState(() {});loadPosts();},),
-                                CategoryItem(title: isLanguage?AppData().language!.opinion:'Opinion', icon: Images.opinion,isSelected: selected==8?true:false,onTap: (){
-                                  selected=8;
-                                  category="Opinion";
-                                  setState(() {});
-                                  loadPosts();
-
-                                },),
-                                CategoryItem(title: isLanguage?AppData().language!.technology:'Technology', icon: Images.technology,isSelected: selected==9?true:false,onTap: (){selected=9;category="Technology";setState(() {});loadPosts();},),
-                                CategoryItem(title: isLanguage?AppData().language!.entertainment:'Entertainment', icon: Images.entertainment,isSelected: selected==10?true:false,onTap: (){selected=10;category="Entertainment";setState(() {});loadPosts();},),
-                                CategoryItem(title: isLanguage?AppData().language!.spamMisleading:'Sports', icon: Images.sport,isSelected: selected==11?true:false,onTap: (){
-                                  selected=11;
-                                  category="Sports";
-                                  setState(() {});
-                                  loadPosts();
-                                },),
-                                CategoryItem(title: isLanguage?AppData().language!.beauty:'Beauty', icon: Images.beauty,isSelected: selected==12?true:false,onTap: (){
-                                  selected=12;
-                                  category="Beauty";
-                                  setState(() {});
-                                  loadPosts();
-                                },),
-                                CategoryItem(title: isLanguage?AppData().language!.science:'Science', icon: Images.science,isSelected: selected==13?true:false,onTap: (){
-                                  selected=13;
-                                  category="Science";
-                                  setState(() {});
-                                  loadPosts();
-                                },),
-                                CategoryItem(title: isLanguage?AppData().language!.health:'Health', icon: Images.health,isSelected: selected==14?true:false,onTap: (){
-                                  selected=14;
-                                  category="Health";
-                                  setState(() {});
-                                  loadPosts();
-
-                                },),
-                              ],
-
+                                controller: _tabController,
+                                padding: EdgeInsets.zero,
+                                indicatorColor: Colors.amber,
+                                indicatorWeight: 4,
+                                indicatorSize: TabBarIndicatorSize.label,
+                                labelPadding: EdgeInsets.symmetric(horizontal: 5),
+                                isScrollable: true,
+                                unselectedLabelStyle: openSansBold.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeSmall),
+                                labelStyle: openSansBold.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor),
+                                tabs: tabs
                             ),
                           )
                       ),
@@ -303,7 +221,7 @@ class _InitialScreenState extends State<InitialScreen> with TickerProviderStateM
                                                 style: openSansBold.copyWith(fontSize: Dimensions.fontSizeExtraSmall,color: Colors.black,overflow: TextOverflow.ellipsis),
                                               ),
                                             ):SizedBox(),
-                                            UserInfo(postDetail: recentPostDetail![index]),
+                                            WebUserInfo(postDetail: recentPostDetail![index]),
                                             Align(
                                               alignment:Alignment.topLeft,
                                               child: Padding(
@@ -329,24 +247,12 @@ class _InitialScreenState extends State<InitialScreen> with TickerProviderStateM
                     ),
                     //SizedBox(width: MediaQuery.of(context).size.width*0.01,),
                     Container(
-                        width: mediaWidth*0.58,
-                        child: TabBarView(
-                          controller: _tabController,
-                          children: [
-                            for(int i=0;i<14;i++)
-                              totalPost>0?ListView.builder(
-                                  controller: scrollController,
-                                  physics: BouncingScrollPhysics(),
-                                  shrinkWrap: true,
-                                  //padding: EdgeInsetsGeometry.infinity,
-                                  itemCount: postDetail!.length,
-                                  itemBuilder: (context,index){
-                                    return FullTransition(postDetail: postDetail![index],);
-
-                                  }
-                              ):Center(child: NoDataScreen()),
-                          ]
-                      ),
+                      width: mediaWidth*0.58,
+                      // child: TabBarView(
+                      //   physics: NeverScrollableScrollPhysics(),
+                      //   controller: _tabController,
+                      //   children: tabsItems,
+                      // ),
                     ),
                     //SizedBox(width: MediaQuery.of(context).size.width*0.01,),
                     mediaWidth>710?Container(
@@ -377,7 +283,7 @@ class _InitialScreenState extends State<InitialScreen> with TickerProviderStateM
                                       style: openSansBold.copyWith(fontSize: Dimensions.fontSizeExtraSmall,color: Colors.black,overflow: TextOverflow.ellipsis),
                                     ),
                                   ):SizedBox(),
-                                  UserInfo(postDetail: recentPostDetail![index]),
+                                  WebUserInfo(postDetail: recentPostDetail![index]),
                                   Align(
                                     alignment:Alignment.topLeft,
                                     child: Padding(
@@ -443,7 +349,6 @@ class _InitialScreenState extends State<InitialScreen> with TickerProviderStateM
     }
     isLoading=false;
   }
-
   Future<void> loadPostsMore() async {
     _tabController!.index=selected-1;
     openLoadingDialog(context, "Loading");
@@ -477,18 +382,12 @@ class _InitialScreenState extends State<InitialScreen> with TickerProviderStateM
     }
     isLoading=false;
   }
-
   Future<void> loadOtherPosts({bool isTap=true}) async {
     offset="0";
     _tabController!.index=selected-1;
     if(isTap){
       return;
     }
-    print("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||");
-    print(offset);
-    print(category);
-    print(AppData().userlocation!.country);
-
     openLoadingDialog(context, "Loading");
     var response;
     response = await DioService.post('all_news_with_other_filter_without_login', {
@@ -505,7 +404,6 @@ class _InitialScreenState extends State<InitialScreen> with TickerProviderStateM
       });
       // showCustomSnackBar(postDetail![0].title??'');
       totalPost=int.tryParse(response['total_posts'].toString())!;
-      print(totalPost.toString());
     }
     else{
       Navigator.pop(context);
@@ -514,12 +412,9 @@ class _InitialScreenState extends State<InitialScreen> with TickerProviderStateM
       });
       //showCustomSnackBar(response['message']);
       totalPost=0;
-      print(totalPost.toString());
-
     }
     isLoading=false;
   }
-
   Future<void> loadOtherPostsMore() async {
     _tabController!.index=selected-1;
     openLoadingDialog(context, "Loading");
@@ -539,7 +434,6 @@ class _InitialScreenState extends State<InitialScreen> with TickerProviderStateM
       });
       // showCustomSnackBar(postDetail![0].title??'');
       totalPost=int.tryParse(response['total_posts'].toString())!;
-      print(totalPost.toString());
     }
     else{
       Navigator.pop(context);
@@ -548,12 +442,9 @@ class _InitialScreenState extends State<InitialScreen> with TickerProviderStateM
       });
       showCustomSnackBar(response['message']);
       totalPost=0;
-      print(totalPost.toString());
-
     }
     isLoading=false;
   }
-
   Future<void> recentPost() async {
     var response;
     response = await DioService.post('get_recent_posts_web_without_login', {
@@ -573,8 +464,6 @@ class _InitialScreenState extends State<InitialScreen> with TickerProviderStateM
     }
     isLoading=false;
   }
-
-
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -596,7 +485,6 @@ class _InitialScreenState extends State<InitialScreen> with TickerProviderStateM
     }
     return await Geolocator.getCurrentPosition();
   }
-
   Future<void> getLocation() async {
 
       position=await _determinePosition();
@@ -655,7 +543,6 @@ class _InitialScreenState extends State<InitialScreen> with TickerProviderStateM
       var jsonData= response['data'];
       Language language = Language.fromJson(jsonData);
       AppData().language=language;
-      print(AppData().language!.toJson());
       isLanguage=true;
       setState(() {
 
@@ -669,5 +556,44 @@ class _InitialScreenState extends State<InitialScreen> with TickerProviderStateM
     }
 
 
+  }
+
+  void getEmojis() async {
+    var response;
+    response = await DioService.get('get_all_emoji');
+    if(response['status']=='success'){
+      var jsonData= response['data'] as List;
+      emojies= jsonData.map<GetEmojis>((e) => GetEmojis.fromJson(e)).toList();
+      for(int i= 0; i<emojies!.length; i++)
+      {
+        tabs.add(
+          TabBarItem(
+              isSelected: selected ==emojies![i].id?true:false,
+              icon: 'assets/emojis/${emojies![i].path}',
+              onTap: (){
+                print("seleteeee ${selected}");
+                print("emojies![i].id ${emojies![i].id}");
+                _tabController!.index = emojies![i].id!;
+                setState(() {
+                });
+              }),
+        );
+
+        tabsItems.add(
+            FullTransitionApp(cateID: emojies![i].id!)
+        );
+      }
+
+      dataLoaded = true;
+      setState(() {
+
+      });
+
+
+    }
+    else{
+      print(response['message']);
+      showCustomSnackBar(response['message']);
+    }
   }
 }

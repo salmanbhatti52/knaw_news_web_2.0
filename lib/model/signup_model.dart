@@ -108,6 +108,12 @@ class UserDetail extends HiveObject{
   bool isFollowed;
   @JsonKey(name: 'is_muted',)
   bool isMuted;
+  @JsonKey(name: 'is_block',)
+  bool isBlocked;
+  @JsonKey(name: 'is_report',)
+  bool isReported;
+  int? total_block;
+  int? total_mute;
 
 
   UserDetail({
@@ -116,8 +122,10 @@ class UserDetail extends HiveObject{
     this.newsRadius=0,this.notificationStatus,this.dateAdded,this.status,this.rolesId,
     this.updatedAt,this.verifyCode,this.joinedSince="",this.totalFollowers=0,this.totalPostCount=0,
     this.totalFollowing=0,this.totalComments=0,this.totalViews=0,this.playerId,this.isFollowed=false,
-    this.isMuted=false,this.address="",this.country="",this.latitude=0,this.longitude=0,this.userVerified=false
-});
+    this.isMuted=false,this.address="",this.country="",this.latitude=0,this.longitude=0,this.userVerified=false,
+    this.total_block,this.total_mute,this.isBlocked=false,this.isReported=false,
+
+  });
   Map<String, dynamic> toJson() => _$UserDetailToJson(this);
   factory UserDetail.fromJson(json) => _$UserDetailFromJson(json);
 

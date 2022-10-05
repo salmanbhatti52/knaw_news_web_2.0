@@ -84,7 +84,8 @@ class _CommentScreenState extends State<CommentScreen> {
       child: Column(
         children: [
           Container(
-            width: MediaQuery.of(context).size.width*9,
+            width: MediaQuery.of(context).size.width*7,
+            color: Colors.red,
             child: Padding(
               padding: EdgeInsets.only(bottom: 10,top: 5),
               child: Column(
@@ -143,6 +144,7 @@ class _CommentScreenState extends State<CommentScreen> {
                               Container(
                                 width: MediaQuery.of(context).size.width*0.65,
                                 height: 50,
+                                color: Colors.green,
                                 child: TextField(
                                   controller: commentController,
                                   onChanged: (value)=> comment=value,

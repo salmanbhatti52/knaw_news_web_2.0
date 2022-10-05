@@ -11,7 +11,8 @@ import 'package:knaw_news/view/base/custom_snackbar.dart';
 import 'package:knaw_news/view/base/loading_dialog.dart';
 import 'package:knaw_news/view/base/no_data_screen.dart';
 import 'package:knaw_news/view/screens/home/widget/full_transition.dart';
-import 'package:knaw_news/view/screens/home/widget/small_transition.dart';
+import 'package:knaw_news/view/screens/home/small_transition.dart';
+import 'package:knaw_news/view/screens/profile/web/post_for_bookmark.dart';
 
 class Bookmarks extends StatefulWidget {
   int? userId;
@@ -50,10 +51,9 @@ class _BookmarksState extends State<Bookmarks> {
           child: ListView.builder(
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              //padding: EdgeInsetsGeometry.infinity,
               itemCount: bookmarkDetail!.length,
               itemBuilder: (context,index){
-                return FullTransition(postDetail: bookmarkDetail![index].bookmarkedPostDetails,);
+                return BookmarkPost(postDetail: bookmarkDetail![index].bookmarkedPostDetails,);
               }
           ),
         ):Center(child: isLoading?Center(child: CircularProgressIndicator(color: Colors.amber,),):NoDataScreen()),

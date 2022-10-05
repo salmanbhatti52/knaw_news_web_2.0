@@ -1,7 +1,3 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:knaw_news/mixin/data.dart';
 import 'package:knaw_news/model/signup_model.dart';
@@ -9,24 +5,17 @@ import 'package:knaw_news/services/dio_service.dart';
 import 'package:knaw_news/util/dimensions.dart';
 import 'package:knaw_news/util/images.dart';
 import 'package:knaw_news/util/styles.dart';
-import 'package:knaw_news/view/base/custom_button.dart';
-import 'package:knaw_news/view/base/custom_image.dart';
 import 'package:knaw_news/view/base/custom_snackbar.dart';
-import 'package:knaw_news/view/base/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:knaw_news/view/base/loading_dialog.dart';
 import 'package:knaw_news/view/screens/auth/sign_up_screen.dart';
-import 'package:knaw_news/view/screens/auth/social_login.dart';
 import 'package:knaw_news/view/screens/dashboard/dashboard_screen.dart';
 import 'package:knaw_news/view/screens/forget/forget_pass_screen.dart';
-import 'package:knaw_news/view/screens/home/home.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
-
-
   @override
   _SignInScreenState createState() => _SignInScreenState();
 }
@@ -258,9 +247,9 @@ class _SignInScreenState extends State<SignInScreen> {
       response = await DioService.post('login', profile.toJson());
       if(response['status']=='success'){
         var jsonData= response['data'];
+
         UserDetail userDetail   =  UserDetail.fromJson(jsonData);
         AppData().userdetail =userDetail;
-        print(AppData().userdetail!.toJson());
         Navigator.pop(context);
         Get.to(() => DashboardScreen(pageIndex: 0));
       }

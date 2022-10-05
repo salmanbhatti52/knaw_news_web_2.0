@@ -46,7 +46,6 @@ class _StatsScreenState extends State<StatsScreen> {
           width: GetPlatform.isDesktop?mediaWidth:null,
           child: isLoading?Center(child: CircularProgressIndicator(color: Colors.amber,),):Column(
             children: [
-
               StatsCard(icon: Images.posts, title: AppData().language!.posts, data: userDetail.totalPostCount.toString()),
               Container(
                 color: Theme.of(context).disabledColor.withOpacity(0.5),

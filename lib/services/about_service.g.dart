@@ -10,7 +10,7 @@ part of 'about_service.dart';
 
 class _AboutServices implements AboutServices {
   _AboutServices(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'https://app.knawnews.com/api/';
+    baseUrl ??= 'https://app2.knawnews.com/api/';
   }
 
   final Dio _dio;

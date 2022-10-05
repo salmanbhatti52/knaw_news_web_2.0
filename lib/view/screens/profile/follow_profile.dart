@@ -19,7 +19,7 @@ import 'package:knaw_news/view/screens/menu/app_bar.dart';
 import 'package:knaw_news/view/screens/menu/drawer.dart';
 import 'package:knaw_news/view/screens/post/create_post_screen.dart';
 import 'package:knaw_news/view/screens/profile/profile_screen.dart';
-import 'package:knaw_news/view/screens/profile/show_post.dart';
+import 'package:knaw_news/view/screens/profile/show_my_post.dart';
 import 'package:knaw_news/view/screens/profile/stats.dart';
 import 'package:knaw_news/view/screens/search/search_screen.dart';
 import 'package:knaw_news/view/screens/setting/setting.dart';

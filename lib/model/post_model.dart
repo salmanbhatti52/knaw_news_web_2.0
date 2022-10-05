@@ -23,7 +23,13 @@ class BookmarkDetail{
   String? updatedAt;
   @JsonKey(name: 'bookmarked_post_details',)
   PostDetail? bookmarkedPostDetails;
-  BookmarkDetail({this.bookmarkId,this.newsPostId,this.usersId,this.bookmarkDatetime,this.updatedAt,this.bookmarkedPostDetails});
+  List<UpperCategories>? uppercategories;
+  List<LowerCategories>? lowercategories;
+
+  BookmarkDetail({this.bookmarkId,this.newsPostId,this.usersId,
+    this.bookmarkDatetime,this.updatedAt,this.bookmarkedPostDetails,
+    this.uppercategories,this.lowercategories
+  });
 
   Map<String, dynamic> toJson() => _$BookmarkDetailToJson(this);
   factory BookmarkDetail.fromJson(json) => _$BookmarkDetailFromJson(json);
@@ -101,15 +107,58 @@ class PostDetail{
   bool? isSadReacted;
   @JsonKey(name: 'user_is_verified',)
   bool userVerified;
+  List<UpperCategories>? uppercategories;
+  List<LowerCategories>? lowercategories;
+
 
 
   PostDetail({this.usersId,this.userName,this.newsPostId,this.title,this.description,this.category,this.externalLink,
     this.location,this.country,this.latitude,this.longitude,this.categoryTag,this.postPicture,this.happyReactions,
     this.postalCode,this.sadReactions,this.eventNewsStartDate,this.eventNewsEndDate,this.createdAt,this.updatedAt,
     this.status,this.timeAgo,this.postUserName,this.postUserProfilePicture,this.isBookmarked,this.isViewed,
-    this.isHappyReacted, this.isSadReacted,this.totalViews,this.totalComments,this.userVerified=false
+    this.isHappyReacted, this.isSadReacted,this.totalViews,this.totalComments,this.userVerified=false,this.uppercategories,
+    this.lowercategories
   });
 
   Map<String, dynamic> toJson() => _$PostDetailToJson(this);
   factory PostDetail.fromJson(json) => _$PostDetailFromJson(json);
 }
+
+
+
+@JsonSerializable(includeIfNull: false)
+class UpperCategories{
+
+  int? id;
+  @JsonKey(name: 'category_name',)
+  String? categoryName;
+  String? path;
+  String? status;
+  int? count;
+
+  UpperCategories({this.id,this.path,this.status,this.categoryName,this.count});
+
+  Map<String, dynamic> toJson() => _$UpperCategoriesToJson(this);
+  factory UpperCategories.fromJson(json) => _$UpperCategoriesFromJson(json);
+
+
+}
+
+@JsonSerializable(includeIfNull: false)
+class LowerCategories{
+
+  int? id;
+  @JsonKey(name: 'category_name',)
+  String? categoryName;
+  String? path;
+  String? status;
+  int? count;
+
+  LowerCategories({this.id,this.path,this.status,this.categoryName,this.count});
+
+  Map<String, dynamic> toJson() => _$LowerCategoriesToJson(this);
+  factory LowerCategories.fromJson(json) => _$LowerCategoriesFromJson(json);
+
+
+}
+

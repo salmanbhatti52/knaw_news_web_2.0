@@ -67,7 +67,6 @@ class _FollowingState extends State<Following> {
                 controller: scrollController,
                 physics: BouncingScrollPhysics(),
                 shrinkWrap: true,
-                //padding: EdgeInsetsGeometry.infinity,
                 itemCount: followDetail!.length,
                 itemBuilder: (context,index){
                   return Column(

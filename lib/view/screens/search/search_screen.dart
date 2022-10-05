@@ -18,7 +18,7 @@ import 'package:knaw_news/view/base/no_data_screen.dart';
 import 'package:knaw_news/view/screens/auth/social_login.dart';
 import 'package:knaw_news/view/screens/home/home.dart';
 import 'package:knaw_news/view/screens/home/widget/full_transition.dart';
-import 'package:knaw_news/view/screens/home/widget/small_transition.dart';
+import 'package:knaw_news/view/screens/home/small_transition.dart';
 import 'package:knaw_news/view/screens/menu/app_bar.dart';
 import 'package:knaw_news/view/screens/search/widget/search_field.dart';
 import 'package:flutter/material.dart';

@@ -19,56 +19,32 @@ class AppBarWithBack extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size=MediaQuery.of(context).size;
+    double mediaWidth =size.width<1000?size.width:size.width*0.5;
     const SystemUiOverlayStyle(
         statusBarBrightness: Brightness.dark,
         statusBarColor: Colors.white
     );
-    return AppBar(
-      systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarBrightness: Brightness.dark,
-        statusBarColor: Colors.white
-      ),
-
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          bottom: Radius.circular(10.0),
+    return Center(
+      child: Container(
+        margin: EdgeInsets.only(bottom: 10),
+        color: Colors.white,
+        width: mediaWidth,
+        height: 80,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+                onPressed: (){
+                  Navigator.pop(context);
+                },
+                icon: Icon(Icons.arrow_back,size: 20,)
+            ),
+            Text(title,style: TextStyle(fontSize: 24,color: Colors.black,fontWeight: FontWeight.bold),),
+            SizedBox(),
+          ],
         ),
       ),
-      elevation: 0,
-      leading: IconButton(
-        onPressed: () => Get.back(),
-        icon: Padding(
-          padding: const EdgeInsets.only(top: 10,bottom: 10),
-          child: SvgPicture.asset(Images.arrow_back, width: 20,color: Colors.black,),
-        ),
-      ),
-      title: isTitle?Text(title,style: openSansExtraBold.copyWith(color: Colors.black),):SvgPicture.asset(title,width: 100,),
-      centerTitle: true,
-      backgroundColor: Colors.white,
-      actions: [
-        //Image.asset(Images.filter, width: 20,),
-        isSuffix?GestureDetector(
-          onTap: suffixTap,
-          child: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: SvgPicture.asset(suffix!, width: 20,height: 20,color: Colors.black,),
-          ),
-        ):SizedBox(),
-      ],
-      // flexibleSpace: Container(
-      //   alignment: Alignment.centerRight,
-      //   height: 100,
-      //   decoration: BoxDecoration(
-      //     color: Colors.red,
-      //     borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10),bottomRight: Radius.circular(10)),
-      //   ),
-      //   child: Row(
-      //     mainAxisAlignment: MainAxisAlignment.end,
-      //     children: [
-      //       Image.asset(Images.filter, width: 20,),
-      //     ],
-      //   ),
-      // ),
     );
   }
 

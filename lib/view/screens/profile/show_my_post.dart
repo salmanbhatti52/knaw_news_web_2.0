@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -10,8 +12,9 @@ import 'package:knaw_news/util/styles.dart';
 import 'package:knaw_news/view/base/custom_snackbar.dart';
 import 'package:knaw_news/view/base/loading_dialog.dart';
 import 'package:knaw_news/view/base/no_data_screen.dart';
+import 'package:knaw_news/view/screens/home/my_post_page.dart';
 import 'package:knaw_news/view/screens/home/widget/full_transition.dart';
-import 'package:knaw_news/view/screens/home/widget/small_transition.dart';
+import 'package:knaw_news/view/screens/home/small_transition.dart';
 
 class ShowPost extends StatefulWidget {
   int? userId;
@@ -28,10 +31,14 @@ class _ShowPostState extends State<ShowPost> {
   int totalPost=-1;
   bool isLoading=true;
   List<PostDetail>? postDetail;
+  Timer? timer;
+  late FocusNode myFocusNode;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    // myFocusNode = FocusNode();
+    // timer = Timer.periodic(Duration(seconds: 3), (Timer t) => widget.userId==AppData().userdetail!.usersId?loadMyPosts():loadOtherPosts());
     if (mounted) {
       WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
         widget.userId==AppData().userdetail!.usersId?loadMyPosts():loadOtherPosts();
@@ -39,6 +46,12 @@ class _ShowPostState extends State<ShowPost> {
     }
 
   }
+  // @override
+  // void dispose() {
+  //   myFocusNode.dispose();
+  //   timer?.cancel();
+  //   super.dispose();
+  // }
   @override
   Widget build(BuildContext context) {
     Size size=MediaQuery.of(context).size;
@@ -56,7 +69,7 @@ class _ShowPostState extends State<ShowPost> {
               //padding: EdgeInsetsGeometry.infinity,
               itemCount: postDetail!.length,
               itemBuilder: (context,index){
-                return FullTransition(postDetail: postDetail![index],);
+                return PostPage(postDetail: postDetail![index]);
               }
           ),
         ):Center(child:  isLoading?Center(child: CircularProgressIndicator(color: Colors.amber,),):NoDataScreen()),

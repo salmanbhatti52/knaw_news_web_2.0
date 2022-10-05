@@ -26,6 +26,7 @@ class Images {
   static const String about = 'assets/image/about.svg';
   static const String logout = 'assets/image/logout.svg';
   static const String pic = 'assets/image/pic.png';
+  static const String message = 'assets/image/message.svg';
 
   static const String search_filter = 'assets/image/search_filter.svg';
   static const String arrow_back = 'assets/image/arrow_back.svg';

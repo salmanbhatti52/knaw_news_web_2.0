@@ -36,6 +36,12 @@ BookmarkDetail _$BookmarkDetailFromJson(Map<String, dynamic> json) =>
       bookmarkedPostDetails: json['bookmarked_post_details'] == null
           ? null
           : PostDetail.fromJson(json['bookmarked_post_details']),
+      uppercategories: (json['uppercategories'] as List<dynamic>?)
+          ?.map((e) => UpperCategories.fromJson(e))
+          .toList(),
+      lowercategories: (json['lowercategories'] as List<dynamic>?)
+          ?.map((e) => LowerCategories.fromJson(e))
+          .toList(),
     );
 
 Map<String, dynamic> _$BookmarkDetailToJson(BookmarkDetail instance) {
@@ -53,6 +59,8 @@ Map<String, dynamic> _$BookmarkDetailToJson(BookmarkDetail instance) {
   writeNotNull('bookmark_datetime', instance.bookmarkDatetime);
   writeNotNull('updated_at', instance.updatedAt);
   writeNotNull('bookmarked_post_details', instance.bookmarkedPostDetails);
+  writeNotNull('uppercategories', instance.uppercategories);
+  writeNotNull('lowercategories', instance.lowercategories);
   return val;
 }
 
@@ -113,6 +121,12 @@ PostDetail _$PostDetailFromJson(Map<String, dynamic> json) => PostDetail(
       totalViews: json['total_views'] as int?,
       totalComments: json['total_comments'] as int?,
       userVerified: json['user_is_verified'] as bool? ?? false,
+      uppercategories: (json['uppercategories'] as List<dynamic>?)
+          ?.map((e) => UpperCategories.fromJson(e))
+          .toList(),
+      lowercategories: (json['lowercategories'] as List<dynamic>?)
+          ?.map((e) => LowerCategories.fromJson(e))
+          .toList(),
     );
 
 Map<String, dynamic> _$PostDetailToJson(PostDetail instance) {
@@ -155,5 +169,59 @@ Map<String, dynamic> _$PostDetailToJson(PostDetail instance) {
   writeNotNull('is_happy_reacted', instance.isHappyReacted);
   writeNotNull('is_sad_reacted', instance.isSadReacted);
   val['user_is_verified'] = instance.userVerified;
+  writeNotNull('uppercategories', instance.uppercategories);
+  writeNotNull('lowercategories', instance.lowercategories);
+  return val;
+}
+
+UpperCategories _$UpperCategoriesFromJson(Map<String, dynamic> json) =>
+    UpperCategories(
+      id: json['id'] as int?,
+      path: json['path'] as String?,
+      status: json['status'] as String?,
+      categoryName: json['category_name'] as String?,
+      count: json['count'] as int?,
+    );
+
+Map<String, dynamic> _$UpperCategoriesToJson(UpperCategories instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('id', instance.id);
+  writeNotNull('category_name', instance.categoryName);
+  writeNotNull('path', instance.path);
+  writeNotNull('status', instance.status);
+  writeNotNull('count', instance.count);
+  return val;
+}
+
+LowerCategories _$LowerCategoriesFromJson(Map<String, dynamic> json) =>
+    LowerCategories(
+      id: json['id'] as int?,
+      path: json['path'] as String?,
+      status: json['status'] as String?,
+      categoryName: json['category_name'] as String?,
+      count: json['count'] as int?,
+    );
+
+Map<String, dynamic> _$LowerCategoriesToJson(LowerCategories instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('id', instance.id);
+  writeNotNull('category_name', instance.categoryName);
+  writeNotNull('path', instance.path);
+  writeNotNull('status', instance.status);
+  writeNotNull('count', instance.count);
   return val;
 }

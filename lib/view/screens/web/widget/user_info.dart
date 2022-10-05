@@ -13,9 +13,9 @@ import 'package:knaw_news/view/base/custom_image.dart';
 import 'package:knaw_news/view/screens/profile/follow_profile.dart';
 import 'package:knaw_news/view/screens/profile/profile_screen.dart';
 
-class UserInfo extends StatelessWidget {
+class WebUserInfo extends StatelessWidget {
   PostDetail? postDetail;
-  UserInfo({this.postDetail});
+  WebUserInfo({this.postDetail});
 
   @override
   Widget build(BuildContext context) {

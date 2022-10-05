@@ -13,12 +13,13 @@ import 'package:knaw_news/util/styles.dart';
 import 'package:knaw_news/view/base/custom_image.dart';
 import 'package:knaw_news/view/base/custom_snackbar.dart';
 import 'package:knaw_news/view/base/loading_dialog.dart';
+import 'package:knaw_news/view/base/web_menu_bar.dart';
 import 'package:knaw_news/view/screens/dashboard/dashboard_screen.dart';
 import 'package:knaw_news/view/screens/dashboard/widget/bottom_nav_item.dart';
 import 'package:knaw_news/view/screens/menu/app_bar.dart';
 import 'package:knaw_news/view/screens/menu/drawer.dart';
 import 'package:knaw_news/view/screens/profile/bookmarks.dart';
-import 'package:knaw_news/view/screens/profile/show_post.dart';
+import 'package:knaw_news/view/screens/profile/show_my_post.dart';
 import 'package:knaw_news/view/screens/profile/stats.dart';
 import 'package:knaw_news/view/screens/setting/setting.dart';
 
@@ -50,35 +51,8 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: new MyDrawer(),
-      appBar: new CustomAppBar(leading: Images.menu,title: AppData().language!.profile,suffix: Images.setting,isTitle: true,isSuffix: true,suffixTap: () => Get.to(() => SettingScreen()),),
-      bottomNavigationBar: ClipRRect(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
-        child: BottomAppBar(
-          //elevation: 0.0,
-          //notchMargin: 2,
-          //clipBehavior: Clip.antiAlias,
-          //shape: CircularNotchedRectangle(),
-          child: Padding(
-            padding: EdgeInsets.all(0),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  BottomNavItem(iconData: Images.home,isSelected: false, onTap: () => Get.to(DashboardScreen(pageIndex: 0))),
-                  BottomNavItem(iconData: Images.search, isSelected: false , onTap: () => Get.to(DashboardScreen(pageIndex: 1))),
-                  BottomNavItem(iconData: Images.add,isSelected: false, onTap: () => Get.to(DashboardScreen(pageIndex: 2))),
-                  BottomNavItem(iconData: Images.user,isSelected: false, onTap: () => Get.to(ProfileScreen())),
-                  // BottomNavItem(title:'home'.tr,iconData: Images.home, isSelected: _pageIndex == 0, onTap: () => _setPage(0)),
-                  // BottomNavItem(title:'favourite'.tr,iconData: Images.favorite, isSelected: _pageIndex == 1, onTap: () => _setPage(1)),
-                  // Expanded(child: SizedBox()),
-                  // BottomNavItem(title:'my_order'.tr,iconData: Images.bag, isSelected: _pageIndex == 3, onTap: () => _setPage(3)),
-                  // BottomNavItem(title:'notification'.tr,iconData: Images.notification, isSelected: _pageIndex == 4, onTap: () {
-                  //   Get.toNamed(RouteHelper.getNotificationRoute());
-                  // }),
-                ]),
-          ),
-        ),
-      ),
+      appBar: WebMenuBar(context: context,isAuthenticated: true,),
+
       body: Container(child: Column(
         children: [
           Container(

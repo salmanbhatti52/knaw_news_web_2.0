@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
@@ -7,12 +9,15 @@ import 'package:knaw_news/model/signup_model.dart';
 import 'package:knaw_news/services/dio_service.dart';
 import 'package:knaw_news/util/dimensions.dart';
 import 'package:knaw_news/util/images.dart';
+import 'package:knaw_news/util/styles.dart';
 import 'package:knaw_news/view/base/custom_snackbar.dart';
 import 'package:knaw_news/view/base/loading_dialog.dart';
 import 'package:knaw_news/view/screens/follow/following.dart';
 import 'package:knaw_news/view/screens/profile/web/follower_list.dart';
 import 'package:knaw_news/view/screens/profile/web/following_list.dart';
 import 'package:knaw_news/view/screens/profile/web/web_stats_card.dart';
+import 'package:knaw_news/view/screens/setting/blocked_members.dart';
+import 'package:knaw_news/view/screens/setting/muted_member.dart';
 class WebStats extends StatefulWidget {
   int? userId;
   WebStats({this.userId});
@@ -67,13 +72,16 @@ class _WebStatsState extends State<WebStats> {
                 width: mediaWidth,
                 height: 1,
               ),
-              InkWell(
-                onTap: (){
-                  isFollower=!isFollower;
-                  isFollowing=false;
-                  setState(() {});
-                },
-                  child: WebStatsCard(icon: Images.followers, title:  AppData().language!.followers, data: userDetail.totalFollowers.toString(),)
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: InkWell(
+                  onTap: (){
+                    isFollower=!isFollower;
+                    isFollowing=false;
+                    setState(() {});
+                  },
+                    child: WebStatsCard(icon: Images.followers, title:  AppData().language!.followers, data: userDetail.totalFollowers.toString(),)
+                ),
               ),
               isFollower?FollowerList(userId: widget.userId,):SizedBox(),
               Container(
@@ -90,6 +98,42 @@ class _WebStatsState extends State<WebStats> {
                   child: Container(child: WebStatsCard(icon: Images.followers, title:  AppData().language!.following, data: userDetail.totalFollowing.toString(),))
               ),
               isFollowing?FollowingList(userId: widget.userId,):SizedBox(),
+              Container(
+                color: Theme.of(context).disabledColor.withOpacity(0.5),
+                width: mediaWidth,
+                height: 1,
+              ),
+          Container(
+            child: ListTile(
+              onTap: (){
+                Get.to(MutedMember());
+              },
+              leading: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: SvgPicture.asset("assets/image/mute.svg", width: 20, color: Colors.black87),
+              ),
+              title: Text('Muted Members',style: openSansBold.copyWith(color: textColor,),),
+              trailing: Text(userDetail.total_mute.toString(),style: openSansSemiBold.copyWith(color: textColor),),
+            ),
+          ),
+              Container(
+                color: Theme.of(context).disabledColor.withOpacity(0.5),
+                width: mediaWidth,
+                height: 1,
+              ),
+          Container(
+            child: ListTile(
+              onTap: (){
+                Get.to(BlockedMembers());
+              },
+              leading: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Icon(Icons.block,size: 20,color: Colors.black87,),
+              ),
+              title: Text('Blocked Members',style: openSansBold.copyWith(color: textColor,),),
+              trailing: Text(userDetail.total_block.toString(),style: openSansSemiBold.copyWith(color: textColor),),
+            ),
+          ),
             ],
           ),
         ),

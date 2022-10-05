@@ -308,7 +308,7 @@ class _WebCommentState extends State<WebComment> {
     );
   }
   Future<void> getAllComments() async {
-    openLoadingDialog(context, "Loading");
+    // openLoadingDialog(context, "Loading");
     var response;
     response = await DioService.post('get_all_comments', {
       "newsPostId" : widget.postDetail!.newsPostId,
@@ -319,7 +319,7 @@ class _WebCommentState extends State<WebComment> {
       var jsonData= response['data'] as List;
       commentDetail=  jsonData.map<CommentDetail>((e) => CommentDetail.fromJson(e)).toList();
       //print(commentDetail![0].toJson());
-      Navigator.pop(context);
+      // Navigator.pop(context);
       totalComments=response['total_comments'];
       setState(() {
 
@@ -328,7 +328,7 @@ class _WebCommentState extends State<WebComment> {
     }
     else{
       totalComments=0;
-      Navigator.pop(context);
+      // Navigator.pop(context);
       //showCustomSnackBar(response['message']);
 
     }

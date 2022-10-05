@@ -21,9 +21,10 @@ class VerticalTile extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 4.0),
         child: Container(
-          child: Column(
+          child: Row(
             children:[
               SvgPicture.asset(icon,height: GetPlatform.isDesktop?Dimensions.fontSizeDefault:icon.contains("face")?14:12,width: GetPlatform.isDesktop?Dimensions.fontSizeDefault:icon.contains("face")?14:12,),
+             SizedBox(width: 5,),
               Text(title,style: openSansRegular.copyWith(fontSize:Dimensions.fontSizeSmall,color: isBlack?Colors.black:Colors.grey),),
             ]
           ),

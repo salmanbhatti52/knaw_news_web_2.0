@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -17,6 +18,7 @@ import 'package:knaw_news/view/base/custom_snackbar.dart';
 import 'package:knaw_news/view/base/loading_dialog.dart';
 import 'package:knaw_news/view/base/web_menu_bar.dart';
 import 'package:knaw_news/view/screens/auth/social_login.dart';
+import 'package:knaw_news/view/screens/home/web_initial_screen.dart';
 import 'package:knaw_news/view/screens/menu/app_bar.dart';
 import 'package:knaw_news/view/screens/menu/appbar_with_back.dart';
 import 'package:knaw_news/view/screens/menu/drawer.dart';
@@ -28,6 +30,8 @@ import 'package:knaw_news/view/screens/setting/language.dart';
 import 'package:knaw_news/view/screens/setting/muted_member.dart';
 import 'package:knaw_news/view/screens/setting/widget/setting_card.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:knaw_news/view/screens/web/widget/help.dart';
+import 'package:knaw_news/view/screens/web/widget/web_sidebar.dart';
 
 class ProfileSetting extends StatefulWidget {
   String description;
@@ -56,210 +60,234 @@ class _ProfileSettingState extends State<ProfileSetting> {
     double mediaWidth=size.width;
     mediaWidth/=2;
     return Scaffold(
-      appBar: WebMenuBar(context: context,isSearch: false,isAuthenticated: true,isHalf: true,),
+      appBar: WebMenuBar(context: context,isSearch: false,isAuthenticated: true,),
       body: SafeArea(child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        child: Center(
-          child: Column(
+        child: Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: mediaWidth,
-                color: Colors.white,
-                alignment: Alignment.center,
-                child: Container(
-                  width: mediaWidth*0.9,
+                  padding: EdgeInsets.only(top: mediaWidth*0.01,),
+                  color: Colors.white,
+                  width: mediaWidth*0.4,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
-                      Text(AppData().language!.myProfileSetting,style: openSansBold.copyWith(color: Colors.amber,),),
-                      SizedBox(height: 10,),
-                      Row(
+                      WebSideBar(isLogin: true,),
+                      SizedBox(height: 20,),
+                      Container(
+                        height: 30,
+                        padding: EdgeInsets.only(left: mediaWidth*0.02,right: mediaWidth*0.01),
+                        margin: EdgeInsets.only(top: 10,bottom: 20),
+                        child: TextButton(
+                          onPressed: () {
+                            AppData().signOut();
+                            Get.offAll(() => WebInitialScreen());
+                          },
+                          style: webFlatButtonStyle,
+                          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                            Text(AppData().language!.logout.toUpperCase(), textAlign: TextAlign.center, style: openSansBold.copyWith(
+                              color: textBtnColor,
+                              fontSize: Dimensions.fontSizeExtraSmall,
+                            )),
+                          ]),
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(left: mediaWidth*0.02),
+                        child: Help(),
+                      ),
+                    ],
+                  )
+              ),
+              Column(
+                children: [
+                  Container(
+                    width: mediaWidth,
+                    color: Colors.white,
+                    alignment: Alignment.center,
+                    child: Container(
+                      width: mediaWidth*0.9,
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colors.amber,
-                                  width: 2,
-                                ),
-                                shape: BoxShape.circle
-                            ),
 
-                            child: Stack(
-                              children: [
-                                ClipOval(
-                                  child: user.profilePicture == null || user.profilePicture == "" ?CustomImage(
-                                    image: Images.placeholder,
-                                    height: 120,
-                                    width: 120,
-                                    fit: BoxFit.cover,
-                                  ):Image.network(
-                                    user.profilePicture??'',
-                                    width: 120,height: 120,fit: BoxFit.cover,
-                                  ),
-                                ),
-                                Positioned(
-                                  bottom: 0, right: 0,
-                                  child: InkWell(
-                                    onTap: () async {
-                                      _pickedFile = (await ImagePicker().getImage(source: ImageSource.gallery))!;
-                                      final   fileaa = _pickedFile.readAsBytes();
-                                      user.profilePicture = base64Encode(await fileaa);
-                                      updateProfilePicture();
-                                      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-                                        statusBarIconBrightness: Brightness.dark,
-                                        statusBarColor: Color(0XFFF6F6F8), // status bar color
-                                      ));
-                                    },
-                                    child: Container(
-                                      height: 30,
-                                      width: 30,
-                                      decoration: const BoxDecoration(
-                                        //borderRadius: BorderRadiusDirectional.circular(20),
-                                        color: Colors.white,
-                                        shape: BoxShape.circle,
-                                        //border: Border.all(width: 1, color: Theme.of(context).primaryColor),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: SvgPicture.asset(Images.camera, color: Colors.black),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                          ),
-                          SizedBox(width: 20,),
-                          Column(
+                          Text(AppData().language!.myProfileSetting,style: openSansBold.copyWith(color: Colors.amber,),),
+                          SizedBox(height: 10,),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SizedBox(
-                                width: mediaWidth*0.6,
-                                child: TextField(
-                                  minLines: 4,
-                                  maxLines: 4,
-                                  maxLength: 100,
-                                  controller: _descriptionController,
-                                  style: openSansRegular.copyWith(color:Colors.black),
-                                  keyboardType: TextInputType.multiline,
-                                  cursorColor: Theme.of(context).primaryColor,
-                                  autofocus: false,
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                    focusColor: const Color(0XF7F7F7),
-                                    hoverColor: const Color(0XF7F7F7),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
-                                      borderSide: const BorderSide(style: BorderStyle.none, width: 0),
-                                    ),
-                                    isDense: true,
-                                    hintText: AppData().language!.yourDescription,
-                                    fillColor: Color(0XFFF0F0F0),
-                                    hintStyle: openSansRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
-                                    filled: true,
-
-                                  ),
-                                ),
-                              ),
                               Container(
-                                height: 30,
-                                width: MediaQuery.of(context).size.width*0.1,
-                                child: TextButton(
-                                  onPressed: () => updateDescription(),
-                                  style: flatButtonStyle,
-                                  child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                                    Text(AppData().language!.Save, textAlign: TextAlign.center, style: openSansBold.copyWith(
-                                      color: textBtnColor,
-                                      fontSize: Dimensions.fontSizeSmall,
-                                    )),
-                                  ]),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.amber,
+                                      width: 2,
+                                    ),
+                                    shape: BoxShape.circle
                                 ),
+
+                                child: Stack(
+                                  children: [
+                                    ClipOval(
+                                      child: user.profilePicture == null || user.profilePicture == "" ?CustomImage(
+                                        image: Images.placeholder,
+                                        height: 120,
+                                        width: 120,
+                                        fit: BoxFit.cover,
+                                      ):Image.network(
+                                        user.profilePicture??'',
+                                        width: 120,height: 120,fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    Positioned(
+                                      bottom: 0, right: 0,
+                                      child: InkWell(
+                                        onTap: () async {
+                                          _pickedFile = (await ImagePicker().getImage(source: ImageSource.gallery))!;
+                                          final   fileaa = _pickedFile.readAsBytes();
+                                          user.profilePicture = base64Encode(await fileaa);
+                                          updateProfilePicture();
+                                          SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+                                            statusBarIconBrightness: Brightness.dark,
+                                            statusBarColor: Color(0XFFF6F6F8), // status bar color
+                                          ));
+                                        },
+                                        child: Container(
+                                          height: 30,
+                                          width: 30,
+                                          decoration: const BoxDecoration(
+                                            //borderRadius: BorderRadiusDirectional.circular(20),
+                                            color: Colors.white,
+                                            shape: BoxShape.circle,
+                                            //border: Border.all(width: 1, color: Theme.of(context).primaryColor),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(5.0),
+                                            child: SvgPicture.asset(Images.camera, color: Colors.black),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
                               ),
-                              SizedBox(height: 10,)
+                              SizedBox(width: 20,),
+                              Column(
+                                children: [
+                                  SizedBox(
+                                    width: mediaWidth*0.6,
+                                    child: TextField(
+                                      minLines: 4,
+                                      maxLines: 4,
+                                      maxLength: 100,
+                                      controller: _descriptionController,
+                                      style: openSansRegular.copyWith(color:Colors.black),
+                                      keyboardType: TextInputType.multiline,
+                                      cursorColor: Theme.of(context).primaryColor,
+                                      autofocus: false,
+                                      obscureText: false,
+                                      decoration: InputDecoration(
+                                        focusColor: const Color(0XF7F7F7),
+                                        hoverColor: const Color(0XF7F7F7),
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
+                                          borderSide: const BorderSide(style: BorderStyle.none, width: 0),
+                                        ),
+                                        isDense: true,
+                                        hintText: AppData().language!.yourDescription,
+                                        fillColor: Color(0XFFF0F0F0),
+                                        hintStyle: openSansRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
+                                        filled: true,
+
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    height: 30,
+                                    width: MediaQuery.of(context).size.width*0.1,
+                                    child: TextButton(
+                                      onPressed: () => updateDescription(),
+                                      style: flatButtonStyle,
+                                      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                        Text(AppData().language!.Save, textAlign: TextAlign.center, style: openSansBold.copyWith(
+                                          color: textBtnColor,
+                                          fontSize: Dimensions.fontSizeSmall,
+                                        )),
+                                      ]),
+                                    ),
+                                  ),
+                                  SizedBox(height: 10,)
+                                ],
+                              ),
                             ],
                           ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-              Container(
-                width: mediaWidth,
-                child: Column(
-                  children: [
-                    SizedBox(height: 20,),
-                    SettingCard(icon: Images.setting, title: AppData().language!.accountSetting,onTap: (){setState(() {selected==1?selected=0:selected=1;});},),
-                    selected==1?Container(
-                      width:mediaWidth*0.8,
-                      margin: EdgeInsets.symmetric(vertical: 10),
-                      child: AccountSetting(),
-                    ):SizedBox(),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 15.0),
-                      child: Container(
-                        color: Theme.of(context).disabledColor.withOpacity(0.5),
-                        width: MediaQuery.of(context).size.width*0.9,
-                        height: 1,
-                      ),
-                    ),
-                    SettingCard(icon: Images.language, title: AppData().language!.language,onTap: (){setState(() {selected==2?selected=0:selected=2;});},),
-                    selected==2?Container(
-                      width:mediaWidth*0.8,
-                      margin: EdgeInsets.symmetric(vertical: 10),
-                      child: LanguageScreen(onLanguageSelect: (language) => updateLanguage(language),),
-                    ):SizedBox(),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 15.0),
-                      child: Container(
-                        color: Theme.of(context).disabledColor.withOpacity(0.5),
-                        width: MediaQuery.of(context).size.width*0.9,
-                        height: 1,
-                      ),
-                    ),
-                    SettingCard(icon: Images.email_bold, title: AppData().language!.changeEmail,onTap: (){setState(() {selected==3?selected=0:selected=3;});},),
-                    selected==3?Container(
-                      width:mediaWidth*0.8,
-                      margin: EdgeInsets.symmetric(vertical: 10),
-                      child: ChangeEmail(),
-                    ):SizedBox(),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 15.0),
-                      child: Container(
-                        color: Theme.of(context).disabledColor.withOpacity(0.5),
-                        width: MediaQuery.of(context).size.width*0.9,
-                        height: 1,
-                      ),
-                    ),
-                    SettingCard(icon: Images.lock_bold, title: AppData().language!.changeYourPassword,onTap: (){setState(() {selected==4?selected=0:selected=4;});},),
-                    selected==4?Container(
-                      width:mediaWidth*0.8,
-                      margin: EdgeInsets.symmetric(vertical: 10),
-                      child: ChangePassword(),
-                    ):SizedBox(),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 15.0),
-                      child: Container(
-                        color: Theme.of(context).disabledColor.withOpacity(0.5),
-                        width: MediaQuery.of(context).size.width*0.9,
-                        height: 1,
-                      ),
-                    ),
-                    SettingCard(icon: Images.mute, title: AppData().language!.mutedMembers,onTap: (){setState(() {selected==5?selected=0:selected=5;});},),
-                    selected==5?Container(
-                      width:mediaWidth*0.8,
-                      margin: EdgeInsets.symmetric(vertical: 10),
-                      child: MutedMember(),
-                    ):SizedBox(),
-                    SizedBox(height: 20,),
+                  Container(
+                    width: mediaWidth,
+                    child: Column(
+                      children: [
+                        SizedBox(height: 20,),
+                        SettingCard(icon: Images.setting, title: AppData().language!.accountSetting,onTap: (){setState(() {selected==1?selected=0:selected=1;});},),
+                        selected==1?Container(
+                          width:mediaWidth*0.8,
+                          margin: EdgeInsets.symmetric(vertical: 10),
+                          child: AccountSetting(),
+                        ):SizedBox(),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 15.0),
+                          child: Container(
+                            color: Theme.of(context).disabledColor.withOpacity(0.5),
+                            width: MediaQuery.of(context).size.width*0.9,
+                            height: 1,
+                          ),
+                        ),
+                        SettingCard(icon: Images.language, title: AppData().language!.language,onTap: (){setState(() {selected==2?selected=0:selected=2;});},),
+                        selected==2?Container(
+                          width:mediaWidth*0.8,
+                          margin: EdgeInsets.symmetric(vertical: 10),
+                          child: LanguageScreen(onLanguageSelect: (language) => updateLanguage(language),),
+                        ):SizedBox(),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 15.0),
+                          child: Container(
+                            color: Theme.of(context).disabledColor.withOpacity(0.5),
+                            width: MediaQuery.of(context).size.width*0.9,
+                            height: 1,
+                          ),
+                        ),
+                        SettingCard(icon: Images.email_bold, title: AppData().language!.changeEmail,onTap: (){setState(() {selected==3?selected=0:selected=3;});},),
+                        selected==3?Container(
+                          width:mediaWidth*0.8,
+                          margin: EdgeInsets.symmetric(vertical: 10),
+                          child: ChangeEmail(),
+                        ):SizedBox(),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 15.0),
+                          child: Container(
+                            color: Theme.of(context).disabledColor.withOpacity(0.5),
+                            width: MediaQuery.of(context).size.width*0.9,
+                            height: 1,
+                          ),
+                        ),
+                        SettingCard(icon: Images.lock_bold, title: AppData().language!.changeYourPassword,onTap: (){setState(() {selected==4?selected=0:selected=4;});},),
+                        selected==4?Container(
+                          width:mediaWidth*0.8,
+                          margin: EdgeInsets.symmetric(vertical: 10),
+                          child: ChangePassword(),
+                        ):SizedBox(),
 
-                  ],
-                ),
+
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ],
-          )
+          ),
         ),
       ),),
     );

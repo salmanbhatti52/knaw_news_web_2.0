@@ -19,7 +19,7 @@ import 'package:knaw_news/view/base/web_menu_bar.dart';
 import 'package:knaw_news/view/screens/auth/social_login.dart';
 import 'package:knaw_news/view/screens/home/home.dart';
 import 'package:knaw_news/view/screens/home/widget/full_transition.dart';
-import 'package:knaw_news/view/screens/home/widget/small_transition.dart';
+import 'package:knaw_news/view/screens/home/small_transition.dart';
 import 'package:knaw_news/view/screens/menu/app_bar.dart';
 import 'package:knaw_news/view/screens/search/web_search_filter.dart';
 import 'package:knaw_news/view/screens/search/widget/search_field.dart';
@@ -55,7 +55,7 @@ class _WebSearchState extends State<WebSearch> {
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      getRecentSearchPost();
+      // getRecentSearchPost();
     });
 
   }
@@ -172,20 +172,20 @@ class _WebSearchState extends State<WebSearch> {
                           width: MediaQuery.of(context).size.width*0.9,
                           child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                             Text('Recent', style: openSansRegular.copyWith(fontSize: Dimensions.fontSizeLarge)),
-                            isView?SizedBox():InkWell(
-                              onTap: () {
-                                isView=true;
-                                setState(() {
-
-                                });
-                              },
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(vertical: Dimensions.PADDING_SIZE_SMALL, horizontal: 4),
-                                child: Text('View all'.tr, style: openSansRegular.copyWith(
-                                  fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor,
-                                )),
-                              ),
-                            ),
+                            // isView?SizedBox():InkWell(
+                            //   onTap: () {
+                            //     isView=true;
+                            //     setState(() {
+                            //
+                            //     });
+                            //   },
+                            //   child: Padding(
+                            //     padding: EdgeInsets.symmetric(vertical: Dimensions.PADDING_SIZE_SMALL, horizontal: 4),
+                            //     child: Text('View all'.tr, style: openSansRegular.copyWith(
+                            //       fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor,
+                            //     )),
+                            //   ),
+                            // ),
                           ]),
                         ),
 
@@ -227,7 +227,7 @@ class _WebSearchState extends State<WebSearch> {
                                           width: 60,height: 55,fit: BoxFit.cover,
                                         ),
                                       ),
-                                      title: Text(postDetail![index].title??'',maxLines:3,style: openSansBold.copyWith(color: textColor),),
+                                      title: Text(postDetail![index].description??'',maxLines:3,style: openSansBold.copyWith(color: textColor),),
                                     ),
                                   ),
                                 );
@@ -267,7 +267,7 @@ class _WebSearchState extends State<WebSearch> {
                                           width: 60,height: 55,fit: BoxFit.cover,
                                         ),
                                       ),
-                                      title: Text(recentDetail![index].postDetail!.title??'',maxLines:3,style: openSansBold.copyWith(color: textColor),),
+                                      title: Text(recentDetail![index].postDetail!.description??'',maxLines:2,style: openSansMedium.copyWith(color: textColor),),
                                     ),
                                   ),
                                 );
@@ -346,7 +346,7 @@ class _WebSearchState extends State<WebSearch> {
 
       });
       Navigator.pop(context);
-      showCustomSnackBar(response['message']);
+      // showCustomSnackBar(response['message']);
 
     }
   }
@@ -371,7 +371,7 @@ class _WebSearchState extends State<WebSearch> {
 
       });
       //Navigator.pop(context);
-      showCustomSnackBar(response['message']);
+      // showCustomSnackBar(response['message']);
 
     }
   }

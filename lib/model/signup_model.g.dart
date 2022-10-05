@@ -242,6 +242,10 @@ UserDetail _$UserDetailFromJson(Map<String, dynamic> json) => UserDetail(
       latitude: (json['latitude'] as num?)?.toDouble() ?? 0,
       longitude: (json['longitude'] as num?)?.toDouble() ?? 0,
       userVerified: json['user_is_verified'] as bool? ?? false,
+      total_block: json['total_block'] as int?,
+      total_mute: json['total_mute'] as int?,
+      isBlocked: json['is_block'] as bool? ?? false,
+      isReported: json['is_report'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$UserDetailToJson(UserDetail instance) {
@@ -285,6 +289,10 @@ Map<String, dynamic> _$UserDetailToJson(UserDetail instance) {
   writeNotNull('one_signal_id', instance.playerId);
   val['is_followed'] = instance.isFollowed;
   val['is_muted'] = instance.isMuted;
+  val['is_block'] = instance.isBlocked;
+  val['is_report'] = instance.isReported;
+  writeNotNull('total_block', instance.total_block);
+  writeNotNull('total_mute', instance.total_mute);
   return val;
 }
 

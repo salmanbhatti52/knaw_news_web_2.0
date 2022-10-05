@@ -98,7 +98,7 @@ class UserInfo extends StatelessWidget {
                     children: [
                       SvgPicture.asset(Images.clock,width:12,height:12,color: Colors.grey,),
                       SizedBox(width: 5,),
-                      Text(postDetail!.timeAgo??'',style: openSansRegular.copyWith(fontSize:Dimensions.fontSizeSmall,color:Colors.black),),
+                      Text(postDetail!.timeAgo??'',style: openSansRegular.copyWith(fontSize:12,color:Colors.black),),
                     ],
                   ),
 

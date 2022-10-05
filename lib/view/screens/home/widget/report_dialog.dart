@@ -90,7 +90,6 @@ class _ReportDialogState extends State<ReportDialog> {
       showCustomSnackBar(response['message']);
 
     }
-    Navigator.pop(context);
 
   }
   Future<void> reportExpirePost() async {
