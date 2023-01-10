@@ -50,7 +50,7 @@ void main() async{
   // ),
   await Firebase.initializeApp();
   await AppData.initiate();
-  AppData().userlocation=UserLocation();
+  //AppData().userlocation=UserLocation();
   runApp(const MyApp());
 }
 

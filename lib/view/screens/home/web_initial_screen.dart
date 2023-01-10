@@ -452,22 +452,22 @@ class _WebInitialScreenState extends State<WebInitialScreen> with TickerProvider
 
   Future<void> getLocation() async {
 
-    position=await _determinePosition();
-    await convertToAddress(position.latitude, position.longitude, AppConstants.apiKey);
-    if(AppData().userdetail!.address.isEmpty){
-      AppData().userdetail!.address=address;
-      AppData().userdetail!.country=country;
-      AppData().userdetail!.latitude=position.latitude;
-      AppData().userdetail!.longitude=position.longitude;
-      //loadOtherPosts(isTap: false);
-    }
-    else{
-      AppData().userdetail!.address=address;
-      AppData().userdetail!.country=country;
-      AppData().userdetail!.latitude=position.latitude;
-      AppData().userdetail!.longitude=position.longitude;
-    }
-    AppData().update();
+    // position=await _determinePosition();
+    // await convertToAddress(position.latitude, position.longitude, AppConstants.apiKey);
+    // if(AppData().userdetail!.address.isEmpty){
+    //   AppData().userdetail!.address=address;
+    //   AppData().userdetail!.country=country;
+    //   AppData().userdetail!.latitude=position.latitude;
+    //   AppData().userdetail!.longitude=position.longitude;
+    //   //loadOtherPosts(isTap: false);
+    // }
+    // else{
+    //   AppData().userdetail!.address=address;
+    //   AppData().userdetail!.country=country;
+    //   AppData().userdetail!.latitude=position.latitude;
+    //   AppData().userdetail!.longitude=position.longitude;
+    // }
+    // AppData().update();
 
   }
   convertToAddress(double lat, double long, String apikey) async {

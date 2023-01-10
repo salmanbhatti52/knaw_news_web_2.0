@@ -395,19 +395,21 @@ class _InitialState extends State<Initial> with TickerProviderStateMixin {
 
   Future<void> getLocation() async {
 
-    position=await _determinePosition();
-    await convertToAddress(position.latitude, position.longitude, AppConstants.apiKey);
-
-    print("getLocation");
-    print("address"+address);
-    UserLocation userLocation=UserLocation();
-    AppData().userlocation=userLocation;
-    AppData().userlocation!.address=address;
-    AppData().userlocation!.country=country;
-    AppData().userlocation!.latitude=position.latitude;
-    AppData().userlocation!.longitude=position.longitude;
-    AppData().updateLocation(AppData().userlocation!);
     loadOtherPosts(isTap: false);
+
+    // position=await _determinePosition();
+    // await convertToAddress(position.latitude, position.longitude, AppConstants.apiKey);
+
+    // print("getLocation");
+    // print("address"+address);
+    // UserLocation userLocation=UserLocation();
+    // AppData().userlocation=userLocation;
+    // AppData().userlocation!.address=address;
+    // AppData().userlocation!.country=country;
+    // AppData().userlocation!.latitude=position.latitude;
+    // AppData().userlocation!.longitude=position.longitude;
+    // AppData().updateLocation(AppData().userlocation!);
+    // loadOtherPosts(isTap: false);
 
   }
   convertToAddress(double lat, double long, String apikey) async {

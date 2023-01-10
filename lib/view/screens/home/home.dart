@@ -390,32 +390,34 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   Future<void> getLocation() async {
 
-    position=await _determinePosition();
-    await convertToAddress(position.latitude, position.longitude, AppConstants.apiKey);
-    //plackmark= await placemarkFromCoordinates(position.latitude, position.longitude);
-    //address="${plackmark!.first.subLocality}${plackmark!.first.locality}";
+    loadOtherPosts(isTap: false);
 
-    //position=await _determinePosition();
-    //plackmark= await placemarkFromCoordinates(position.latitude, position.longitude);
-    //address="${plackmark!.first.subLocality}${plackmark!.first.locality}";
+    // position=await _determinePosition();
+    // await convertToAddress(position.latitude, position.longitude, AppConstants.apiKey);
+    // //plackmark= await placemarkFromCoordinates(position.latitude, position.longitude);
+    // //address="${plackmark!.first.subLocality}${plackmark!.first.locality}";
 
-    print("getLocation");
-    print("address"+address);
-    print("country"+country);
-    if(AppData().userdetail!.address.isEmpty){
-      AppData().userdetail!.address=address;
-      AppData().userdetail!.country=country;
-      AppData().userdetail!.latitude=position.latitude;
-      AppData().userdetail!.longitude=position.longitude;
-      loadOtherPosts(isTap: false);
-    }
-    else{
-      AppData().userdetail!.address=address;
-      AppData().userdetail!.country=country;
-      AppData().userdetail!.latitude=position.latitude;
-      AppData().userdetail!.longitude=position.longitude;
-    }
-    AppData().update();
+    // //position=await _determinePosition();
+    // //plackmark= await placemarkFromCoordinates(position.latitude, position.longitude);
+    // //address="${plackmark!.first.subLocality}${plackmark!.first.locality}";
+
+    // print("getLocation");
+    // print("address"+address);
+    // print("country"+country);
+    // if(AppData().userdetail!.address.isEmpty){
+    //   AppData().userdetail!.address=address;
+    //   AppData().userdetail!.country=country;
+    //   AppData().userdetail!.latitude=position.latitude;
+    //   AppData().userdetail!.longitude=position.longitude;
+    //   loadOtherPosts(isTap: false);
+    // }
+    // else{
+    //   AppData().userdetail!.address=address;
+    //   AppData().userdetail!.country=country;
+    //   AppData().userdetail!.latitude=position.latitude;
+    //   AppData().userdetail!.longitude=position.longitude;
+    // }
+    // AppData().update();
 
   }
   convertToAddress(double lat, double long, String apikey) async {

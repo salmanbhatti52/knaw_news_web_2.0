@@ -392,16 +392,18 @@ class _InitialScreenState extends State<InitialScreen> with TickerProviderStateM
     var response;
     response = await DioService.post('all_news_with_other_filter_without_login', {
       "offset": offset,
-      "otherCategory": category,
-      "userCountry": AppData().userlocation!.country
+      "otherCategory": category
     });
     if(response['status']=='success'){
       var jsonData= response['data'] as List;
-      postDetail=  jsonData.map<PostDetail>((e) => PostDetail.fromJson(e)).toList();
+      postDetail = jsonData.map<PostDetail>((e) => PostDetail.fromJson(e)).toList();
       Navigator.pop(context);
       setState(() {
 
       });
+      
+      //print(response['total_posts']);
+      //print(response['data']);
       // showCustomSnackBar(postDetail![0].title??'');
       totalPost=int.tryParse(response['total_posts'].toString())!;
     }
@@ -421,9 +423,7 @@ class _InitialScreenState extends State<InitialScreen> with TickerProviderStateM
     var response;
     response = await DioService.post('all_news_with_other_filter_without_login', {
       "offset": offset,
-      "otherCategory": category,
-      if(categoryTag.isNotEmpty)"categoryTag": categoryTag,
-      "userCountry": AppData().userlocation!.country
+      "otherCategory": category
     });
     if(response['status']=='success'){
       var jsonData= response['data'] as List;
@@ -487,19 +487,21 @@ class _InitialScreenState extends State<InitialScreen> with TickerProviderStateM
   }
   Future<void> getLocation() async {
 
-      position=await _determinePosition();
-      await convertToAddress(position.latitude, position.longitude, AppConstants.apiKey);
+    loadOtherPosts(isTap: false);
 
-    print("getLocation");
-    print("address"+address);
-      UserLocation userLocation=UserLocation();
-      AppData().userlocation=userLocation;
-      AppData().userlocation!.address=address;
-      AppData().userlocation!.country=country;
-      AppData().userlocation!.latitude=position.latitude;
-      AppData().userlocation!.longitude=position.longitude;
-      AppData().updateLocation(AppData().userlocation!);
-      loadOtherPosts(isTap: false);
+    //   position=await _determinePosition();
+    //   await convertToAddress(position.latitude, position.longitude, AppConstants.apiKey);
+
+    // print("getLocation");
+    // print("address"+address);
+    //   UserLocation userLocation=UserLocation();
+    //   AppData().userlocation=userLocation;
+    //   AppData().userlocation!.address=address;
+    //   AppData().userlocation!.country=country;
+    //   AppData().userlocation!.latitude=position.latitude;
+    //   AppData().userlocation!.longitude=position.longitude;
+    //   AppData().updateLocation(AppData().userlocation!);
+    //   loadOtherPosts(isTap: false);
 
   }
   convertToAddress(double lat, double long, String apikey) async {
