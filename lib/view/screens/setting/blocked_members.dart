@@ -21,7 +21,6 @@ class BlockedMembers extends StatefulWidget {
 class _BlockedMembersState extends State<BlockedMembers> {
   List<BlockedUserModel>? blockedMemberDetail=[];
   ScrollController scrollController=ScrollController();
-
   int totalMember=0;
   int? selectedIndex;
   bool isLoading=true;
@@ -40,63 +39,68 @@ class _BlockedMembersState extends State<BlockedMembers> {
       appBar: AppBarWithBack(title: 'Blocked Members',isTitle: true,isSuffix: false,),
       body: SafeArea(
         child: Center(
-          child: Container(
-              width: mediaWidth,
-              child: ListView.builder(
-                  controller: scrollController,
-                  physics: BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: blockedMemberDetail!.length,
-                  itemBuilder: (context,index){
-                    return Column(
-                      children: [
-                        Container(
-                          child: ListTile(
-                            leading: Stack(
-                              children: [
-                                ClipOval(
-                                  child: blockedMemberDetail![index].blockedMemberProfilePicture == null || blockedMemberDetail![index].blockedMemberProfilePicture == "" ?CustomImage(
-                                    image: Images.placeholder,
-                                    height: 45,
-                                    width: 45,
-                                    fit: BoxFit.cover,
-                                  ):Image.network(blockedMemberDetail![index].blockedMemberProfilePicture.toString(),
-                                    width: 45,height: 45,fit: BoxFit.cover,
-                                  ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                  width: mediaWidth,
+                  child: ListView.builder(
+                      controller: scrollController,
+                      physics: BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: blockedMemberDetail!.length,
+                      itemBuilder: (context,index){
+                        return Column(
+                          children: [
+                            Container(
+                              child: ListTile(
+                                leading: Stack(
+                                  children: [
+                                    ClipOval(
+                                      child: blockedMemberDetail![index].blockedMemberProfilePicture == null || blockedMemberDetail![index].blockedMemberProfilePicture == "" ?CustomImage(
+                                        image: Images.placeholder,
+                                        height: 45,
+                                        width: 45,
+                                        fit: BoxFit.cover,
+                                      ):Image.network(blockedMemberDetail![index].blockedMemberProfilePicture.toString(),
+                                        width: 45,height: 45,fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            title: Text(blockedMemberDetail![index].blockedMemberUserName??'',style: openSansBold.copyWith(color: Colors.black,),),
-                            trailing: Container(
-                              height: 30,
-                              width: 100,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: Colors.red
+                                title: Text(blockedMemberDetail![index].blockedMemberUserName??'',style: openSansBold.copyWith(color: Colors.black,),),
+                                trailing: Container(
+                                  height: 30,
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: Colors.red
+                                  ),
+                                  child: GestureDetector(
+                                    onTap: (){
+                                      unblockUser(blockedMemberDetail![index].blockedUserId);
+                                    },
+                                    child: Center(
+                                      child: Text('Unblock',
+                                        style: openSansSemiBold.copyWith(color: Colors.white),textAlign: TextAlign.center,)),),
+                                ),
                               ),
-                              child: GestureDetector(
-                                onTap: (){
-                                  unblockUser(blockedMemberDetail![index].blockedUserId);
-                                },
-                                child: Center(
-                                  child: Text('Unblock',
-                                    style: openSansSemiBold.copyWith(color: Colors.white),textAlign: TextAlign.center,)),),
                             ),
-                          ),
-                        ),
-                        Container(
-                          color: Theme.of(context).disabledColor.withOpacity(0.5),
-                          width: MediaQuery.of(context).size.width,
-                          margin: EdgeInsets.symmetric(vertical: 7,horizontal: 20),
-                          height: 1.5,
-                        ),
-                      ],
+                            Container(
+                              color: Theme.of(context).disabledColor.withOpacity(0.5),
+                              width: MediaQuery.of(context).size.width,
+                              margin: EdgeInsets.symmetric(vertical: 7,horizontal: 20),
+                              height: 1.5,
+                            ),
+                          ],
 
-                    );
+                        );
 
-                  }
-              ),
-            ),
+                      }
+                  ),
+                ),
+            ],
+          ),
         ),
         )
     );
@@ -137,7 +141,7 @@ class _BlockedMembersState extends State<BlockedMembers> {
     response = await DioService.post('unblock_user', data);
     print(response);
     if(response['status']=='success'){
-      showCustomSnackBar("Unblocked successfully");
+      //showCustomSnackBar("Unblocked successfully");
       Navigator.pop(context);
     }
     else{

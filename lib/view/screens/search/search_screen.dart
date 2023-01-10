@@ -218,6 +218,8 @@ class _SearchScreenState extends State<SearchScreen> {
                           itemCount: isView?recentDetail!.length:totalPost>3?3:recentDetail!.length,
                           itemBuilder: (context,index){
                             print("index "+ index.toString());
+                            print(' here is testing the image');
+                            print(AppConstants.proxyUrl+recentDetail![index].postDetail!.postPicture!);
                             return InkWell(
                               onTap: (){
                                 FocusManager.instance.primaryFocus!.unfocus();

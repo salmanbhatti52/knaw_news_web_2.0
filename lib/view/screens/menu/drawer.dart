@@ -14,10 +14,11 @@ import 'package:knaw_news/view/screens/auth/sign_in_screen.dart';
 import 'package:knaw_news/view/screens/auth/social_login.dart';
 import 'package:knaw_news/view/screens/contact_us/contact_us.dart';
 import 'package:knaw_news/view/screens/dashboard/dashboard_screen.dart';
-import 'package:knaw_news/view/screens/inbox/inbox.dart';
 import 'package:knaw_news/view/screens/language/language.dart';
 import 'package:knaw_news/view/screens/profile/profile_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../inbox/web_inbox.dart';
 
 class MyDrawer extends StatefulWidget {
   @override

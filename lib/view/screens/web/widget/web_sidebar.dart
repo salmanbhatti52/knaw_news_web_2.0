@@ -13,7 +13,6 @@ import 'package:knaw_news/view/screens/auth/sign_in_screen.dart';
 import 'package:knaw_news/view/screens/auth/social_login.dart';
 import 'package:knaw_news/view/screens/auth/web/web_sign_in.dart';
 import 'package:knaw_news/view/screens/dashboard/dashboard_screen.dart';
-import 'package:knaw_news/view/screens/inbox/inbox.dart';
 import 'package:knaw_news/view/screens/inbox/web_inbox.dart';
 import 'package:knaw_news/view/screens/messeges/message_page.dart';
 import 'package:knaw_news/view/screens/profile/profile_screen.dart';
@@ -36,7 +35,7 @@ class WebSideBar extends StatelessWidget {
 
     return Column(
       children: [
-        WebSideBarItem(icon: Images.home, title: isLanguage?AppData().language!.home:"Home", onTap: (){}),
+        WebSideBarItem(icon: Images.home, title: isLanguage?AppData().language!.home:"Home", onTap: () =>isLogin?Get.toNamed("/WebHome"):Get.toNamed("/WebSignIn")),
         WebSideBarItem(icon: Images.user, title: isLanguage?AppData().language!.profile:"Profile", onTap: () =>isLogin?Get.toNamed("/WebProfile"):Get.toNamed("/WebSignIn")),
         WebSideBarItem(icon: Images.inbox, title: isLanguage?AppData().language!.inbox:"Inbox", onTap: () =>isLogin?Get.toNamed("/WebInbox"):Get.toNamed("/WebSignIn")),
         if(isLogin) WebSideBarItem(icon: Images.message, title: "Message", onTap: () {Get.to(MessagePage());}),

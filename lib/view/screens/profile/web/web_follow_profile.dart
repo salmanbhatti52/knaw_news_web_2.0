@@ -21,6 +21,8 @@ import 'package:knaw_news/view/screens/home/home.dart';
 import 'package:knaw_news/view/screens/menu/app_bar.dart';
 import 'package:knaw_news/view/screens/menu/drawer.dart';
 import 'package:knaw_news/view/screens/messeges/messageDetailsPage.dart';
+import 'package:knaw_news/view/screens/messeges/messageDetailsPageForUsers.dart';
+import 'package:knaw_news/view/screens/messeges/message_page.dart';
 import 'package:knaw_news/view/screens/post/create_post_screen.dart';
 import 'package:knaw_news/view/screens/profile/profile_screen.dart';
 import 'package:knaw_news/view/screens/profile/show_my_post.dart';
@@ -65,23 +67,23 @@ class _WebFollowProfileState extends State<WebFollowProfile> with TickerProvider
             child: Container(
               width: w*0.5,
               margin: EdgeInsets.zero,
-              height: 165,
+              height: MediaQuery.of(context).size.height * 0.3,
               child: Padding(
                 padding:  EdgeInsets.symmetric(horizontal: 12),
                 child: Column(
                   children: [
-                    SizedBox(height: 10),
+                    SizedBox(height: 15),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Block ",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-                        Text("${userDetail.userName.toString()} ?",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold))
+                        Text("Block ",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                        Text("${userDetail.userName.toString()} ?",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold))
                       ],
                     ),
                     SizedBox(height: 8),
                     Text('They will not be able to send your messages,see your posts,or find your profile.'
                         ' They will not be notify that you blocked them.',
-                      style: TextStyle(fontSize: 14  ),
+                      style: TextStyle(fontSize: 12  ),
                       textAlign: TextAlign.center,),
                     SizedBox(height: 15),
                     Container(height: 0.5,color: Colors.grey.shade400,),
@@ -92,7 +94,7 @@ class _WebFollowProfileState extends State<WebFollowProfile> with TickerProvider
                           onPressed: (){Navigator.pop(context);},
                           child: Text('Cancel',style: TextStyle(color: Colors.black,fontSize: 16),),
                         ),
-                        Container(height: 45,width: 0.5,color: Colors.grey.shade400,),
+                        Container(height: 50,width: 0.5,color: Colors.grey.shade400,),
                         TextButton(
                           onPressed: (){
                             blockUser();
@@ -248,7 +250,7 @@ class _WebFollowProfileState extends State<WebFollowProfile> with TickerProvider
                                       SizedBox(width: 20,),
                                       GestureDetector(
                                         onTap: (){
-                                          CustomNavigator.navigateTo(context, MessageDetailsPage(
+                                          CustomNavigator.navigateTo(context, MessageDetailsPageForUser(
                                             userName: userDetail.userName.toString(),
                                             profilePic: userDetail.profilePicture!,
                                             otherUserChatId: userDetail.usersId,
@@ -560,7 +562,7 @@ class _WebFollowProfileState extends State<WebFollowProfile> with TickerProvider
     response = await DioService.post('block_user', data);
     print(response);
     if(response['status']=='success'){
-      showCustomSnackBar("Blocked successfully");
+     // showCustomSnackBar("Blocked successfully");
       Navigator.pop(context);
       Navigator.pop(context);
     }

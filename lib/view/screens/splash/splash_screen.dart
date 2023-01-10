@@ -14,7 +14,6 @@ import 'package:knaw_news/view/screens/auth/auth_screen.dart';
 import 'package:knaw_news/view/screens/auth/sign_in_screen.dart';
 import 'package:knaw_news/view/screens/home/home.dart';
 import 'package:knaw_news/view/screens/home/initial.dart';
-import 'package:knaw_news/view/screens/inbox/inbox.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class SplashScreen extends StatefulWidget {

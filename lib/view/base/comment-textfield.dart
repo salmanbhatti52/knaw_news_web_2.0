@@ -21,6 +21,7 @@ class EventCommentTextField extends StatelessWidget {
       children: [
         Container(
           height: 90,
+
         padding: EdgeInsets.only(top:13,bottom: 10),
         decoration: BoxDecoration(
           color: Color(0xfff6f6f6),

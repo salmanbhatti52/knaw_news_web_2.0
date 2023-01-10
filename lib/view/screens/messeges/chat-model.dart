@@ -1,5 +1,3 @@
-
-
 import 'package:json_annotation/json_annotation.dart';
 import 'package:knaw_news/view/screens/messeges/model.dart';
 

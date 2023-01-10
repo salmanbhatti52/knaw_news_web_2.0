@@ -135,7 +135,7 @@ class _ShowPostState extends State<ShowPost> {
     else{
       isLoading=false;
       setState(() {});
-      showCustomSnackBar(response['message']);
+      // showCustomSnackBar(response['message']);
       totalPost=0;
       print(totalPost.toString());
 

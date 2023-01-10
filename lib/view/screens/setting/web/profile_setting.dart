@@ -33,6 +33,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:knaw_news/view/screens/web/widget/help.dart';
 import 'package:knaw_news/view/screens/web/widget/web_sidebar.dart';
 
+import '../../../../util/app_constants.dart';
+
 class ProfileSetting extends StatefulWidget {
   String description;
   ProfileSetting({Key? key,this.description=""}) : super(key: key);
@@ -66,6 +68,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
         child: Container(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                   padding: EdgeInsets.only(top: mediaWidth*0.01,),
@@ -134,10 +137,12 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                         height: 120,
                                         width: 120,
                                         fit: BoxFit.cover,
-                                      ):Image.network(
-                                        user.profilePicture??'',
-                                        width: 120,height: 120,fit: BoxFit.cover,
-                                      ),
+                                      ):
+                                          Image.asset(' assets/image/empty_box.png',height: 120, width: 120,fit: BoxFit.cover,)
+                                      // Image.network(
+                                      //   AppConstants.proxyUrl+user.profilePicture.toString()??'',
+                                      //   width: 120,height: 120,fit: BoxFit.cover,
+                                      // ),
                                     ),
                                     Positioned(
                                       bottom: 0, right: 0,
@@ -326,6 +331,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
         "userId":user.usersId,
         "profilePicture": user.profilePicture
       });
+      print(user.profilePicture);
       if(response['status']=='success'){
         var jsonData= response['data'];
         user=  UserDetail.fromJson(jsonData);

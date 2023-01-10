@@ -58,6 +58,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       title: isTitle?Text(title,style: openSansExtraBold.copyWith(color: Colors.black),):SvgPicture.asset(title,width: 100,),
       centerTitle: true,
+
+
       backgroundColor: Colors.white,
       actions: [
         //Image.asset(Images.filter, width: 20,),

@@ -10,11 +10,11 @@ import 'package:knaw_news/view/base/profile-image-picker.dart';
 import 'package:knaw_news/view/screens/messeges/chat-model.dart';
 
 class MessageDetailsPage extends StatefulWidget {
- final  String profilePic;
+ final  String? profilePic;
  final int? otherUserChatId;
- final String userName;
+ final String? userName;
 
-  const MessageDetailsPage({Key? key,required this.profilePic,this.otherUserChatId,required this.userName, }) : super(key: key);
+  const MessageDetailsPage({Key? key, this.profilePic,this.otherUserChatId, this.userName, }) : super(key: key);
 
   @override
   State<MessageDetailsPage> createState() => _MessageDetailsPageState();
@@ -39,7 +39,7 @@ class _MessageDetailsPageState extends State<MessageDetailsPage> {
       return ;
       else{
        print(message.text);
-       openLoadingDialog(context, 'sending');
+       //openLoadingDialog(context, 'sending');
        await startChat();
        var response;
        try{
@@ -52,9 +52,10 @@ class _MessageDetailsPageState extends State<MessageDetailsPage> {
            "requestType" : "sendMessage"
          });
          print(response);
-         Navigator.of(context).pop();
+         //Navigator.of(context).pop();
          FocusManager.instance.primaryFocus!.unfocus();
          message.clear();
+         _controller.animateTo(_controller.position.maxScrollExtent, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
          // Timer(Duration(milliseconds: 500),() => _controller.jumpTo(_controller.position.maxScrollExtent));
          setState(() {});
        }
@@ -140,31 +141,26 @@ class _MessageDetailsPageState extends State<MessageDetailsPage> {
             children: [
               Container(
                 width: mediaWidth,
-                height: 70,
+                height: 45,
                 color: Colors.white,
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 15),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      GestureDetector(
-                          onTap:() {
-                            Navigator.pop(context);
-                          },
-                          child: Icon(Icons.arrow_back,color: Colors.black,size: 22,)),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(
-                            width: 50,
-                            height: 50,
+                            width: 40,
+                            height: 40,
                             child: ProfileImagePicker(
                               onImagePicked: (value){},
                               previousImage: widget.profilePic,
                             ),
                           ),
                           SizedBox(width: 10,),
-                          Text(widget.userName, style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold,)),
+                          Text(widget.userName.toString(), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold,)),
                           SizedBox(width: 35,),
                         ],
                       ),
@@ -182,6 +178,15 @@ class _MessageDetailsPageState extends State<MessageDetailsPage> {
                     controller: _controller,
                     itemCount:messages.length,
                       itemBuilder: (context,index){
+                        if(index == messages.length){
+                          return Container(
+                            height: 70,
+                          );
+                        }
+                        if(index == 0){
+                          _controller.animateTo(_controller.position.maxScrollExtent, duration: Duration(milliseconds: 1), curve: Curves.easeOut);
+                          //cond++;
+                        }
                       GetMessages message=messages[index];
                       print(message.userId);
                       bool isMe = message.userId == AppData().userdetail!.usersId;
@@ -247,15 +252,12 @@ class _MessageDetailsPageState extends State<MessageDetailsPage> {
               ),
 
               EventCommentTextField(
-                   onSubmitted: (value) {
-
-                     print('ENTER pressed');
-                     if (_formKey.currentState!.validate()) {
-
-                       sendMessage();
-
-                     }
-                   },
+                onSubmitted: (value) {
+                  if (_formKey.currentState!.validate()) {
+                    _formKey.currentState!.save();
+                    sendMessage();
+                  }
+                },
                     onTapEmoji: (){
                     FocusScopeNode currentFocus = FocusScope.of(context);
                      if (!currentFocus.hasPrimaryFocus) {

@@ -20,28 +20,33 @@ class FollowCard extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: SizedBox(
-        width: width,
-        child: ListTile(
-          leading: Stack(
-            children: [
-              ClipOval(
-                child: icon == "" ?CustomImage(
-                  image: Images.placeholder,
-                  height: 35,
-                  width: 35,
-                  fit: BoxFit.cover,
-                ):Image.network(
-                  AppConstants.proxyUrl+icon,
-                  width: 35,height: 35,fit: BoxFit.cover,
+        width:25,
+        height: 25,
+        //width: width,//MediaQuery.of(context).size.height * 0.2,
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: ListTile(
+            leading: Stack(
+              children: [
+                ClipOval(
+                  child: icon == "" ?CustomImage(
+                    image: Images.placeholder,
+                    height: 35,
+                    width: 35,
+                    fit: BoxFit.cover,
+                  ):Image.network(
+                    AppConstants.proxyUrl+icon,
+                    width: 35,height: 35,fit: BoxFit.cover,
+                  ),
                 ),
-              ),
-              isVerified!?Positioned(
-                bottom: 0, right: 0,
-                child: SvgPicture.asset(Images.badge,height: 10,width: 10,),
-              ):SizedBox(),
-            ],
+                isVerified!?Positioned(
+                  bottom: 0, right: 0,
+                  child: SvgPicture.asset(Images.badge,height: 10,width: 10,),
+                ):SizedBox(),
+              ],
+            ),
+            title: Text(title,style: openSansSemiBold.copyWith(color: Colors.black,fontSize: Dimensions.fontSizeExtraSmall),),
           ),
-          title: Text(title,style: openSansSemiBold.copyWith(color: Colors.black,fontSize: Dimensions.fontSizeExtraSmall),),
         ),
       ),
     );

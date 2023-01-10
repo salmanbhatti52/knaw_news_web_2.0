@@ -56,17 +56,29 @@ class UserInfo extends StatelessWidget {
                         shape: BoxShape.circle
                     ),
 
-                    child: ClipOval(
+                    child:
+                      ClipOval(
                       child: postDetail!.postUserProfilePicture == null || postDetail!.postUserProfilePicture == "" ?CustomImage(
                         image: Images.placeholder,
                         height: 35,
                         width: 35,
                         fit: BoxFit.cover,
                       ):Image.network(
-                        AppConstants.proxyUrl+postDetail!.postUserProfilePicture!,
+                        postDetail!.postUserProfilePicture??'',
                         width: 35,height: 35,fit: BoxFit.cover,
                       ),
                     ),
+                    // ClipOval(
+                    //   child: postDetail!.postUserProfilePicture == null || postDetail!.postUserProfilePicture == "" ?CustomImage(
+                    //     image: Images.placeholder,
+                    //     height: 35,
+                    //     width: 35,
+                    //     fit: BoxFit.cover,
+                    //   ):Image.network(
+                    //     AppConstants.proxyUrl+postDetail!.postUserProfilePicture!,
+                    //     width: 35,height: 35,fit: BoxFit.cover,
+                    //   ),
+                    // ),
 
                   ),
                   postDetail!.userVerified?Positioned(

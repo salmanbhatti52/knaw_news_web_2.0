@@ -44,8 +44,8 @@ NotificationDetail _$NotificationDetailFromJson(Map<String, dynamic> json) =>
       isFollowingBack: json['is_following_back'] as bool?,
       senderUserProfilePicture: json['sender_user_profile_picture'] as String?,
       newsPostPicture: json['news_post_picture'] as String?,
-      daysAgo: json['days_ago'] as String?,
       userVerified: json['user_is_verified'] as bool?,
+      daysAgo: json['days_ago'],
     );
 
 Map<String, dynamic> _$NotificationDetailToJson(NotificationDetail instance) {

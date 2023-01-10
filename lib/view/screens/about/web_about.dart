@@ -50,7 +50,7 @@ class _WebAboutState extends State<WebAbout> {
               children: [
                 Text(AppData().language!.about,style: openSansBold),
                 SizedBox(height: 15,),
-                Text(about,style: openSansRegular.copyWith(color: textColor,fontSize: Dimensions.fontSizeExtraSmall),),
+                Text('Social gateway to trending topics and trends organized into perfect categories for you to enjoy. Users manage content by rating posts by users, pushing posts into their most-voted emoji. Want to feel good? Check out the smiley posts. Want to fix the world\'s problems? Check out the angry emoji posts. Perhaps you want to feel warm and cuddly? Check the love heart posts. Content rated by the people for the people.',style: openSansRegular.copyWith(color: textColor,fontSize: Dimensions.fontSizeExtraSmall),),
               ],
             ),
           ),

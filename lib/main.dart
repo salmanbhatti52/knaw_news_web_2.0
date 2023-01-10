@@ -75,7 +75,7 @@ class MyApp extends StatelessWidget {
         "/WebPostScreen": (context) => WebPostScreen(),
         "/WebAbout": (context) => WebAbout(),
         "/ContactUs": (context) => ContactUs(),
-        "/WebInbox": (context) => WebInbox(),
+        "/WebInbox": (context) => InboxScreen(),
         "/ForgetPassword": (context) => ForgetPassword(),
         "/Verification": (context) => Verification(email: "you@gmail.com"),
         "/ResetPassword": (context) => ResetPassword(),

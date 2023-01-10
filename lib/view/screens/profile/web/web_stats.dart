@@ -40,6 +40,19 @@ class _WebStatsState extends State<WebStats> {
     });
 
   }
+
+  bool _isvisible(){
+    if( AppData().userdetail?.userName == userDetail.userName ){
+      print(AppData().userdetail?.userName);
+      print(userDetail.userName);
+      print(true);
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     Size size=MediaQuery.of(context).size;
@@ -74,6 +87,7 @@ class _WebStatsState extends State<WebStats> {
               ),
               MouseRegion(
                 cursor: SystemMouseCursors.click,
+
                 child: InkWell(
                   onTap: (){
                     isFollower=!isFollower;
@@ -103,7 +117,8 @@ class _WebStatsState extends State<WebStats> {
                 width: mediaWidth,
                 height: 1,
               ),
-          Container(
+          Visibility(
+            visible: _isvisible(),
             child: ListTile(
               onTap: (){
                 Get.to(MutedMember());
@@ -121,7 +136,8 @@ class _WebStatsState extends State<WebStats> {
                 width: mediaWidth,
                 height: 1,
               ),
-          Container(
+          Visibility(
+            visible: _isvisible(),
             child: ListTile(
               onTap: (){
                 Get.to(BlockedMembers());
@@ -152,20 +168,13 @@ class _WebStatsState extends State<WebStats> {
       //Get.back();
       isLoading=false;
       if(mounted){
-        setState(() {
-
-        });
+        setState(() {});
       }
-
-
     }
     else{
-      //Get.back();
       isLoading=false;
       if(mounted){
-        setState(() {
-
-        });
+        setState(() {});
       }
       showCustomSnackBar(response['status']);
 

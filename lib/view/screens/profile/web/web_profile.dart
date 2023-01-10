@@ -118,25 +118,57 @@ class _WebProfileState extends State<WebProfile> with TickerProviderStateMixin {
                                       shape: BoxShape.circle
                                   ),
 
-                                  child: Stack(
+                                  child:
+                                  Stack(
                                     children: [
                                       ClipOval(
-                                        child: userDetail.profilePicture == null || userDetail.profilePicture == "" ?CustomImage(
+                                        child: userDetail.profilePicture == null ||
+                                            userDetail.profilePicture == ""
+                                            ? CustomImage(
                                           image: Images.placeholder,
-                                          height: 120,
-                                          width: 120,
+                                          height: 90,
+                                          width: 90,
                                           fit: BoxFit.cover,
-                                        ):Image.network(
-                                          AppConstants.proxyUrl+userDetail.profilePicture!,
-                                          width: 120,height: 120,fit: BoxFit.cover,
+                                        )
+                                            : Image.network(
+                                          userDetail.profilePicture ?? '',
+                                          width: 90,
+                                          height: 90,
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
-                                      userDetail.userVerified==null?SizedBox():userDetail.userVerified?Positioned(
-                                        bottom: 5, right: 5,
-                                        child: SvgPicture.asset(Images.badge,),
-                                      ):SizedBox(),
+                                      userDetail.userVerified == null
+                                          ? const SizedBox()
+                                          : userDetail.userVerified
+                                          ? Positioned(
+                                        bottom: 2,
+                                        right: 2,
+                                        child: SvgPicture.asset(
+                                          Images.badge,
+                                        ),
+                                      )
+                                          : const SizedBox(),
                                     ],
                                   ),
+                                  // Stack(
+                                  //   children: [
+                                  //     ClipOval(
+                                  //       child: userDetail.profilePicture == null || userDetail.profilePicture == "" ?CustomImage(
+                                  //         image: Images.placeholder,
+                                  //         height: 120,
+                                  //         width: 120,
+                                  //         fit: BoxFit.cover,
+                                  //       ):Image.network(
+                                  //         AppConstants.proxyUrl+userDetail.profilePicture!,
+                                  //         width: 120,height: 120,fit: BoxFit.cover,
+                                  //       ),
+                                  //     ),
+                                  //     userDetail.userVerified==null?SizedBox():userDetail.userVerified?Positioned(
+                                  //       bottom: 5, right: 5,
+                                  //       child: SvgPicture.asset(Images.badge,),
+                                  //     ):SizedBox(),
+                                  //   ],
+                                  // ),
 
                                 ),
                                 SizedBox(width: 20,),

@@ -34,12 +34,11 @@ class AppBarWithBack extends StatelessWidget implements PreferredSizeWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            IconButton(
-                onPressed: (){
-                  Navigator.pop(context);
-                },
-                icon: Icon(Icons.arrow_back,size: 20,)
-            ),
+           InkWell(
+               onTap: (){
+                 Get.back();
+               },
+               child: Icon(Icons.arrow_back)),
             Text(title,style: TextStyle(fontSize: 24,color: Colors.black,fontWeight: FontWeight.bold),),
             SizedBox(),
           ],

@@ -91,10 +91,12 @@ class _WebHomeState extends State<WebHome> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     Size size=MediaQuery.of(context).size;
-    double mediaWidth=size.width<1000?size.width:size.width*0.7;
+    double mediaWidth=size.width<1000?size.width*0.7:size.width*0.7;
 
     return Scaffold(
-      appBar: WebMenuBar(context: context,isAuthenticated: true,),
+      appBar:
+      WebMenuBar(context: context,isAuthenticated: true,),
+
       body: dataLoaded == false
           ? Center(child: CircularProgressIndicator(color: Colors.amber,),) : SafeArea(child: Center(
         child: Column(
@@ -219,7 +221,7 @@ class _WebHomeState extends State<WebHome> with TickerProviderStateMixin {
                           Container(
                             height: 30,
                             padding: EdgeInsets.only(left: mediaWidth*0.02,right: mediaWidth*0.01),
-                            margin: EdgeInsets.only(top: 10,bottom: 100),
+                            margin: EdgeInsets.only(top: 10,bottom: 10),
                             child: TextButton(
                               onPressed: () {
                                 AppData().signOut();
@@ -362,6 +364,13 @@ class _WebHomeState extends State<WebHome> with TickerProviderStateMixin {
                                     //     ),
                                     //   ),
                                     // ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                      child: Text(recentPostDetail![index].description.toString(),
+                                      textAlign: TextAlign.start,
+                                        maxLines: 2,
+                                      ),
+                                    ),
                                   ],
                                 ),
                               );
